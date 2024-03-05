@@ -1,0 +1,1159 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="3.1 存储管理基础 3.1.1 存储管理主要模式 &#x3D;&#x3D;逻辑地址&#x3D;&#x3D;：相对地址，即用户程序所使用的地址空间。从0开始编号，有两种形式：一维逻辑地址（地址）；二维逻辑地址（段号：段内地址）  段式程序设计：把一个程序设计成多个段：代码段、数据端、堆栈段等 用户可以自己应用 段覆盖技术 扩充内存空间使用量  &#x3D;&#x3D;物理地址&#x3D;&#x3D;：绝对地址，即程序执行所使用的地址空间，处理器执行指令时按照物理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="存储管理">
+<meta property="og:url" content="http://example.com/2023/02/13/nju-course-review-notes/os/memory-management/index.html">
+<meta property="og:site_name" content="ICDE">
+<meta property="og:description" content="3.1 存储管理基础 3.1.1 存储管理主要模式 &#x3D;&#x3D;逻辑地址&#x3D;&#x3D;：相对地址，即用户程序所使用的地址空间。从0开始编号，有两种形式：一维逻辑地址（地址）；二维逻辑地址（段号：段内地址）  段式程序设计：把一个程序设计成多个段：代码段、数据端、堆栈段等 用户可以自己应用 段覆盖技术 扩充内存空间使用量  &#x3D;&#x3D;物理地址&#x3D;&#x3D;：绝对地址，即程序执行所使用的地址空间，处理器执行指令时按照物理">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-04T17:11:39.183Z">
+<meta property="article:author" content="zhc">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>存储管理 - ICDE</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/csdn_iconfont/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="ICDE" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ICDE的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="存储管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-13 00:00" pubdate>
+          2023年2月13日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">存储管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="存储管理基础">3.1 存储管理基础</h2>
+<h3 id="存储管理主要模式">3.1.1 存储管理主要模式</h3>
+<p>==逻辑地址==：相对地址，即用户程序所使用的地址空间。从0开始编号，有两种形式：一维逻辑地址（地址）；二维逻辑地址（段号：段内地址）</p>
+<blockquote>
+<p>段式程序设计：把一个程序设计成多个段：代码段、数据端、堆栈段等</p>
+<p>用户可以自己应用 <strong>段覆盖技术</strong> 扩充内存空间使用量</p>
+</blockquote>
+<p>==物理地址==：绝对地址，即程序执行所使用的地址空间，处理器执行指令时按照物理地址进行。</p>
+<h4 id="主存储器">主存储器</h4>
+<p>多道程序设计需要复用主存</p>
+<ul>
+<li>按照分区复用：一个程序/程序段占用一个分区</li>
+<li>按照页架复用：一个程序/程序段占用多个页架</li>
+</ul>
+<p>存储器管理的基本模式</p>
+<ol type="1">
+<li>单连续存储管理：<u>一维逻辑地址空间</u>的程序占用<u>一个主存固定分区或可变分区</u></li>
+<li>段式存储管理：<u>段式二维逻辑地址空间</u>的程序占用<u>多个主存可变分区</u></li>
+<li>页式存储管理：<u>一维逻辑地址空间</u>的程序占用<u>多个主存页架区</u></li>
+<li>段页式存储管理：<u>段式二维逻辑地址空间</u>的程序占用<u>多个主存页架区</u></li>
+</ol>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221123201329326.png" srcset="/img/loading.gif" lazyload
+alt="存储管理模式示意图" />
+<figcaption aria-hidden="true">存储管理模式示意图</figcaption>
+</figure>
+<h3 id="存储管理的功能">3.1.2 存储管理的功能</h3>
+<h4 id="地址转换">地址转换</h4>
+<ul>
+<li>地址转换：又称重定位，即把逻辑地址转换为绝对地址</li>
+<li>静态重定位：==程序装入内存时==进行地址转换</li>
+<li>动态重定位：==在CPU执行程序时==进行地址转换</li>
+</ul>
+<h4 id="分配与去配">分配与去配</h4>
+<ul>
+<li>分配：进程装入主存时，存储管理软件进行具体的主存分配操作，并设置一个表格记录主存空间的分配情况</li>
+<li>去配：当某个进程撤离或者主动归还主存资源时，存储管理软件要收回它所占用的全部或者部分存储空间，调整主存分配表信息</li>
+</ul>
+<h4 id="主存储器空间的共享">主存储器空间的共享</h4>
+<p><u>多道程序设计技术</u>
+使若干个程序同时进入主存储器，各自占用一定数量的存储空间，<u>共同使用一个主存储器</u>，若干个协作进程有共同的主存程序块或者主存数据块</p>
+<blockquote>
+<p>存储保护问题，软硬件协同完成</p>
+<ul>
+<li>私有主存区中的信息：可读可写</li>
+<li>公共区中的共享信息：看授权</li>
+<li>非本进程信息：不可读写</li>
+</ul>
+</blockquote>
+<h4 id="主存储器空间的扩充">主存储器空间的扩充</h4>
+<ul>
+<li>存储扩充：磁盘作为主存扩充，只把部分进程或者进程的部分内容装入内存。
+<ul>
+<li>对换技术：把部分不运行的进程调出</li>
+<li>虚拟技术：只调入进程的部分内容</li>
+</ul></li>
+</ul>
+<h3 id="虚拟存储器的概念">3.1.3 虚拟存储器的概念</h3>
+<h4 id="虚拟存储器">虚拟存储器</h4>
+<blockquote>
+<p>程序局部性原理：指程序在执行过程中的一个较短时间内，<u>所执行的指令地址</u>
+<u>或操作数地址分别局限于一定的存储区域中</u></p>
+</blockquote>
+<p>1、原因：</p>
+<ul>
+<li>主存容量存在限制，使得用户编写程序受限，多道程序设计道数受限</li>
+<li>存在空间局部性和时间局部性，使得某一阶段只需要部分进程内容</li>
+</ul>
+<p>2、基本思想：</p>
+<ul>
+<li>进程信息全部放在辅存，执行时==随用随调入==</li>
+<li>把主存中暂时不用的信息调到辅存上去</li>
+</ul>
+<p>3、实现思路：</p>
+<ul>
+<li>建立两个地址空间
+<ul>
+<li>（辅存）虚拟地址空间：容纳进程装入</li>
+<li>（主存）实际地址空间：承载进程执行</li>
+</ul></li>
+<li>虚拟存储器是一种地址空间扩展技术，对用户透明，用户编程时以为可以操纵整个内存</li>
+</ul>
+<p>4、覆盖与交换</p>
+<ul>
+<li>覆盖：按照程序逻辑结构让那些不需要同时执行的程序段共享同一块内存区，使得后面的程序段可以调入内存覆盖前面的程序段。</li>
+<li>交换：把处于等待状态的进程换出内存。</li>
+</ul>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221123204556880.png" srcset="/img/loading.gif" lazyload
+alt="虚拟存储器" />
+<figcaption aria-hidden="true">虚拟存储器</figcaption>
+</figure>
+<h3 id="存储管理的硬件支撑">3.1.4 存储管理的硬件支撑</h3>
+<h4 id="存储器的组织层次">存储器的组织层次</h4>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221123204656005.png" srcset="/img/loading.gif" lazyload
+alt="存储器金字塔层次" />
+<figcaption aria-hidden="true">存储器金字塔层次</figcaption>
+</figure>
+<p>存储管理涉及的存储对象：</p>
+<ol type="1">
+<li>主存储器</li>
+<li>Cache</li>
+<li>为了获得更大的虚拟地址空间，存储管理需要对存放在硬盘、固态硬盘、甚至网络硬盘上的虚拟存储器文件进行管理</li>
+</ol>
+<h4 id="cache">Cache</h4>
+<p>1、介于CPU和主存之间的高速缓冲存储器，SRAM组成，接近CPU速度。（主存DRAM）</p>
+<p>2、CPU往往需要重复读取同样的数据块，时间局部性和空间局部性</p>
+<p>3、组成：高速存储器、联想存储器、地址转换部件、替换逻辑</p>
+<ul>
+<li>联想存储器：根据内容进行寻址的存储器。</li>
+<li>地址转换部件：通过联想存储器建立目录表以实现快速地址转换。命中时直接访问Cache，未命中时从内存读取放入Cache。</li>
+<li>替换部件：在Cache已满时按一定策略进行数据块替换，并修改地址转换部件。</li>
+</ul>
+<p>4、组织：L1、L2、L3三级</p>
+<ul>
+<li>L1 Cache：数据缓存和指令缓存；内置；32KB-256KB</li>
+<li>L2 Cache：内置和外置；512KB—8MB</li>
+<li>L3 Cache：多为外置</li>
+</ul>
+<h3 id="伙伴系统">伙伴系统</h3>
+<ul>
+<li>伙伴系统，又称buddy算法，是一种固定分区和可变分区折中的主存管理算法</li>
+<li>任何尺寸为2<sup>i</sup>的空闲块都可以被分为两个尺寸为2<sup>i-1</sup>的空闲块，这两个空闲块称作伙伴</li>
+<li>SunOS操作系统中首创的基于伙伴系统的<code>slab</code>分配器</li>
+<li><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127151706379.png" srcset="/img/loading.gif" lazyload /></li>
+<li><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127151731055.png" srcset="/img/loading.gif" lazyload /></li>
+</ul>
+<h3 id="分段和分页">分段和分页</h3>
+<h4 id="分段">分段</h4>
+<ul>
+<li>分段是信息的物理单位，由源程序的逻辑结构所决定，用户可见</li>
+<li>段长可以根据用户需要来规定，段起始地址可以从任何主存地址开始</li>
+<li>分段方式下，源程序（段号，段内地址）经连结装配后地址仍保持二维结构</li>
+<li><strong>段是不定长连续的</strong></li>
+</ul>
+<h4 id="分页">分页</h4>
+<ul>
+<li>分页是信息的物理单位，与源程序的逻辑结构无关，用户不可见</li>
+<li>页长由系统决定，页面只能以页大小的整数倍地址开始</li>
+<li>分页方式中，源程序（页号，页内地址）经连结装配后地址变成了一维结构</li>
+</ul>
+<h2 id="单连续分区存储管理">3.2 单连续分区存储管理</h2>
+<h3 id="单连续分区存储管理-1">3.2.1 单连续分区存储管理</h3>
+<p>每个进程占用一个物理上完全连续的存储空间（区域）</p>
+<h4 id="单用户连续分区管理存储">单用户连续分区管理存储</h4>
+<ul>
+<li>主存区域划分为系统区和用户区</li>
+<li>设置一个栅栏寄存器界分两个区域，硬件用它在执行时进行地址转换</li>
+<li>一般采用静态重定位进行地址转换</li>
+<li>硬件实现代价低</li>
+<li>适用于单用户单任务操作系统（DOS）</li>
+</ul>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126232350828.png" srcset="/img/loading.gif" lazyload /></p>
+<h4 id="固定分区存储管理">固定分区存储管理</h4>
+<ul>
+<li>支持多个分区</li>
+<li>分区数量固定、大小固定</li>
+<li>可用静态重定位</li>
+<li>硬件实现代价低</li>
+<li>早期OS采用</li>
+</ul>
+<p>主存分配：采用主存分配表记录主存的分配信息</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126232531636.png" srcset="/img/loading.gif" lazyload /></p>
+<p>地址转换</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126232815963.png" srcset="/img/loading.gif" lazyload /></p>
+<h4 id="可变分区存储管理">可变分区存储管理</h4>
+<ul>
+<li>固定分区存储管理不够灵活，既不适应大尺寸程序，又存在内存零头，有浪费</li>
+<li>可变分区存储管理：允许按照进程实际内存需求动态划分分区，并允许分区个数可变</li>
+</ul>
+<h3 id="可变分区存储管理-1">3.2.2 可变分区存储管理</h3>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126234630035.png" srcset="/img/loading.gif" lazyload /></p>
+<p>主存分配表：已分配区表和未分配区表，采用链表结构</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126234732011.png" srcset="/img/loading.gif" lazyload /></p>
+<p>分配算法：</p>
+<ul>
+<li>最先适配分配算法：空闲分区以<strong>地址递增</strong>的次序连接，分配内存时<strong>顺序查找</strong>，找到大小能满足要求的第一个空闲分区</li>
+<li>邻近适配分配算法：循环首次适应算法，由首次适应算法演变而成，不同的是，分配内存时<strong>从上次查找结束的位置</strong>开始继续查找</li>
+<li>最优适配分配算法：空闲分区按<strong>容量递增的方式</strong>形成分区链，找到第一个满足要求的空闲分区</li>
+<li>最坏适配分配算法：空闲分区以<strong>容量递减的次序</strong>连接，找到第一个能满足要求的空闲分区</li>
+</ul>
+<p>地址转换</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126234915421.png" srcset="/img/loading.gif" lazyload /></p>
+<p><strong>内存零头</strong></p>
+<ul>
+<li>固定分区方式会产生<u>内存内零头</u></li>
+<li>可变分区方式会产生<u>内存外零头</u></li>
+<li>分段方式会产生内存外零头</li>
+<li>分页方式会产生内存内零头</li>
+<li>最优适配算法最容易产生外零头，<u>外零头是不可避免的</u></li>
+</ul>
+<p><strong>移动技术（程序浮动技术）</strong></p>
+<ul>
+<li>移动分区以解决内存外零头</li>
+<li>需要动态重定位的支撑</li>
+</ul>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126235242772.png" srcset="/img/loading.gif" lazyload /></p>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221126235315170.png" srcset="/img/loading.gif" lazyload
+alt="工作流程" />
+<figcaption aria-hidden="true">工作流程</figcaption>
+</figure>
+<h2 id="页式存储管理">3.3 页式存储管理</h2>
+<h3 id="页式存储管理的基本原理">3.3.1 页式存储管理的基本原理</h3>
+<ul>
+<li>分页存储器将主存划分成多个大小相等的==页架==</li>
+<li>受页架尺寸限制，程序的逻辑地址也自然分成==页==</li>
+<li>不同的页可以放在不同的页架中，不需要连续</li>
+<li>页表用于维系进程的主存完整性</li>
+<li>可用一张位示图来记录主存分配情况</li>
+</ul>
+<p>地址转换</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127000913182.png" srcset="/img/loading.gif" lazyload /></p>
+<p>页的共享</p>
+<ul>
+<li>页式存储管理能够实现多个进程共享程序和数据</li>
+<li>数据共享：不同进程可以使用不同页号共享数据页</li>
+<li>代码共享：不同进程必须使用相同页号共享代码页（JMP指令在不同页号是做不到的）</li>
+</ul>
+<h3 id="页式存储管理的地址转换">3.3.2 页式存储管理的地址转换</h3>
+<h4 id="转换代价">转换代价</h4>
+<ul>
+<li>每次地址转换需要访问两次主存
+<ul>
+<li>读取页表</li>
+<li>读写数据</li>
+</ul></li>
+<li>降低存取速度</li>
+<li>利用Cache存放部分页表</li>
+</ul>
+<h4 id="快表">快表</h4>
+<ul>
+<li>这种高速存储器是联想存储器，即按内容寻址，而非按照地址寻址</li>
+</ul>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127002107339.png" srcset="/img/loading.gif" lazyload
+alt="地址转换" />
+<figcaption aria-hidden="true">地址转换</figcaption>
+</figure>
+<h3 id="页式虚拟存储管理">3.3.3 页式虚拟存储管理</h3>
+<p>把进程全部页面装入虚拟存储器，执行时先把部分页面装入实际内存，然后，根据执行行为，动态调入不在主存中的页，同时进行必要的页面调出。</p>
+<p><strong>现代OS的主流存储管理技术</strong></p>
+<p>首次只把进程的第一页信息装入主存，称为==请求页式存储管理==</p>
+<p>需要扩充页表</p>
+<ul>
+<li><p>原本是：只存放主存块号</p></li>
+<li><p>现在需要：<u>标志位</u>（主存驻留标志，写回标志，保护标志、引用标志、可移动标志）+<u>主存块号</u>+<u>辅助存储器地址</u></p></li>
+</ul>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127132726430.png" srcset="/img/loading.gif" lazyload
+alt="地址转换" />
+<figcaption aria-hidden="true">地址转换</figcaption>
+</figure>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127132805046.png" srcset="/img/loading.gif" lazyload
+alt="缺页中断" />
+<figcaption aria-hidden="true">缺页中断</figcaption>
+</figure>
+<h3 id="页面调度">3.3.4 页面调度</h3>
+<p>当主存空间已满但是有需要装入新页时，页式虚拟存储管理必须按照一定的算法把已在主存的一些页调出去</p>
+<ul>
+<li>页面调度：选择淘汰页的工作</li>
+<li>页面调度算法：选择淘汰页的算法</li>
+<li>如果页面调度算法设计不当，会出现==抖动/颠簸==现象，即刚被淘汰的页面立即又要调入，如此反复</li>
+</ul>
+<h4 id="缺页中断率">缺页中断率</h4>
+<ul>
+<li><p>定义：不成功访问的次数 / 访问的总次数</p></li>
+<li><p>影响缺页中断率的因素</p>
+<ul>
+<li><u>分配给进程的页架数</u>：可用页架数越多，缺页中断率就越低</li>
+<li><u>页面的大小</u>：尺寸越大，缺页中断率就越低</li>
+<li><u>用户的程序编制方法</u></li>
+</ul></li>
+<li><p>经典例子</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127133944658.png" srcset="/img/loading.gif" lazyload /></p></li>
+</ul>
+<h4 id="调度算法">调度算法</h4>
+<ul>
+<li>OPT页面调度算法：<u>理想的调度算法</u>，当要调入新页面时，<u>首先淘汰以后不再访问的页，然后选择距离现在最长时间后再访问的页</u>
+<ul>
+<li>Belady算法，又称最佳算法</li>
+<li>OPT只可模拟，不可实现</li>
+</ul></li>
+<li>先进先出FIFO页面调度算法
+<ul>
+<li>总是淘汰<u>最先调入主存的那一页</u>（主存驻留时间最长的那一页）</li>
+<li>思想：模拟的是程序执行的顺序性</li>
+<li><strong>Belady异常</strong>：增加可用物理页框的数量会导致更多的缺页异常。</li>
+</ul></li>
+<li>最近最少使用LRU页面调度算法
+<ul>
+<li>淘汰<u>最近一段时间较久未被访问的那一页</u></li>
+<li>思想：那些刚刚被使用过的页面，可能马上还要被用到</li>
+<li>需要维护特殊队列</li>
+<li><strong>时间间隔中断，中断时页引用标志位置0</strong></li>
+<li>地址转换时，页引用标志位置1</li>
+<li>淘汰页面时，从页引用标志位为0的页中随机淘汰</li>
+</ul></li>
+<li>最不常用LFU页面调度算法
+<ul>
+<li>淘汰<u>最近一段时间内访问次数最少的页面</u></li>
+<li><strong>基于时间间隔中断</strong>，给每一页设置一个计数器</li>
+<li><strong>时间间隔中断发生后，所有计数器清0</strong></li>
+<li>每访问页1次就给计数器加1</li>
+<li>选择计数值最小的页面淘汰</li>
+</ul></li>
+<li>时钟CLOCK页面调度算法
+<ul>
+<li>采用循环队列机制构造页面队列</li>
+<li>工作流程
+<ul>
+<li>页面调入主存和访问主存页面时，引用标志位置1</li>
+<li>淘汰页面时，从指针当前指向的页面开始扫描循环队列
+<ul>
+<li>遇到引用标志位是1的页面将引用标志位清0</li>
+<li>遇到引用标志位是0的页面淘汰，指针推进一步，算法停止</li>
+<li><strong>如果引用标志位全部是1</strong>，指针会环绕整个循环队列一圈，把碰到的引用标志位清0，指针停在起始位置（开始遍历的位置），并淘汰该页，然后指针向前推进一步</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>局部最佳页面替换算法（MIN）
+<ul>
+<li>如果该页面在时间间隔<span class="math inline">\((t,
+t+\tau)\)</span>内未被引用，那么就移除；否则该页被保留在进程驻留集中</li>
+</ul></li>
+<li>工作集置换算法（WS）
+<ul>
+<li>==进程工作集==：在某一段时间间隔内进程运行所需访问的页面集合
+<ul>
+<li><span class="math inline">\(W(t, \Delta)\)</span>表示在时刻<span
+class="math inline">\(t-\Delta\)</span>到时刻<span
+class="math inline">\(t\)</span>之间所访问的页面集合，进程在时刻<span
+class="math inline">\(t\)</span>的工作集</li>
+</ul></li>
+<li>实现思想：不向前查看页面引用串，而是基于程序局部性原理向后看</li>
+<li>定期地从进程驻留集中删去那些不在工作集中的页面。如果页面在时间间隔<span
+class="math inline">\((t-\Delta, t)\)</span>内未被引用，就要移除。</li>
+</ul></li>
+</ul>
+<h3 id="反置页表">3.3.5 反置页表</h3>
+<p><strong>针对内存中的每个页架建立一个页表，按照块号排序</strong></p>
+<p>反置页表项</p>
+<ul>
+<li>页号：虚拟地址页号部分</li>
+<li>进程标志符：使用该页的进程</li>
+<li>控制位</li>
+<li>链指针</li>
+</ul>
+<p>地址转换过程</p>
+<ul>
+<li>MMU通过哈希表把<u>进程标识</u>和<u>虚拟页号</u>转换成一个哈希值，指向IPT的一个表目</li>
+<li>MMU<u>遍历哈希链</u>找到所需进程的虚页号，<u>该项的索引就是页架号</u>，通过拼接位移便可生成物理地址</li>
+<li>若遍历整个反置页表中未能找到匹配页表项，说明该页不在内存，产生缺页中断，请求操作系统调入</li>
+</ul>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127190347147.png" srcset="/img/loading.gif" lazyload
+alt="地址转换" />
+<figcaption aria-hidden="true">地址转换</figcaption>
+</figure>
+<h3 id="多级页表">3.3.6 多级页表</h3>
+<ul>
+<li>系统为每个进程建一张页目录表，它的每个表项对应一个页表页，而页表页的每个表项给出了页面和页框的对应关系，页目录表是一级页表，页表页是二级页表</li>
+<li>逻辑地址结构由三部分组成：页目录、页表页和位移</li>
+<li><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127185029725.png" srcset="/img/loading.gif" lazyload /></li>
+</ul>
+<h3 id="页的大小">页的大小</h3>
+<blockquote>
+<p>页的大小会影响很多因素</p>
+</blockquote>
+<h3 id="tlb快表">TLB快表</h3>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127212343408.png" srcset="/img/loading.gif" lazyload
+alt="快表" />
+<figcaption aria-hidden="true">快表</figcaption>
+</figure>
+<h2 id="段式存储管理">3.4 段式存储管理</h2>
+<h3 id="段式存储管理-1">3.4.1 段式存储管理</h3>
+<h4 id="段式程序设计">段式程序设计</h4>
+<ul>
+<li>每个程序可有若干段组成，每一段都可以从“0”开始编址，段内地址是连续的</li>
+<li>分段存储器的逻辑地址由两部分组成：<u>段号+单元号</u></li>
+</ul>
+<h4 id="基本思想">基本思想</h4>
+<ul>
+<li><p>段式存储管理基于可变分区存储管理实现，一个进程要占用多个分区</p></li>
+<li><p>存储管理需要增加设置一个段表，每个段站占用一个段表项：段起址+段限长+标志位</p></li>
+<li><p>转换流程</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127145627167.png" srcset="/img/loading.gif" lazyload /></p></li>
+<li><p>段的共享：通过不同进程段表中的项指向同一个段基址来实现，对共享段的信息必须进行保护。</p></li>
+</ul>
+<h3 id="段式虚拟存储管理">3.4.2 段式虚拟存储管理</h3>
+<ul>
+<li>进程的所有分段都存放在辅存中，进程运行时先把需要的段装入内存，执行过程中再动态装入</li>
+<li><figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127150229497.png" srcset="/img/loading.gif" lazyload
+alt="地址转换" />
+<figcaption aria-hidden="true">地址转换</figcaption>
+</figure></li>
+</ul>
+<h3 id="段页式存储管理">3.4.3 段页式存储管理</h3>
+<ul>
+<li>段式存储管理可以基于页式存储管理实现，每一段不必占据连续的存储空间，可以存放在不连续的主存页架中
+=&gt; 段页式存储管理，装入部分段或者装入段中的部分页面</li>
+<li><figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127150559962.png" srcset="/img/loading.gif" lazyload
+alt="段表和页表" />
+<figcaption aria-hidden="true">段表和页表</figcaption>
+</figure></li>
+<li><figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127150539225.png" srcset="/img/loading.gif" lazyload
+alt="地址转换" />
+<figcaption aria-hidden="true">地址转换</figcaption>
+</figure></li>
+<li><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221127150648346.png" srcset="/img/loading.gif" lazyload /></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/nju-course-review/" class="category-chain-item">nju-course-review</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/">#OS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>存储管理</div>
+      <div>http://example.com/2023/02/13/nju-course-review-notes/os/memory-management/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>zhc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/13/nju-course-review-notes/os/file-management/" title="文件管理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">文件管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/12/nju-course-review-notes/os/device-management/" title="设备管理">
+                        <span class="hidden-mobile">设备管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1095 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前缀和 使用于 数组固定不变  而且需要频繁求和的情况  相关题目： 1、一维数组的区域和检索 303 2、二维数组的区域和检索 304 3、和为k的子数组个数 560  在求解数组和的时候，最普通的方法就是for循环遍历，复杂度为\(O(N)\)。 但是当需要多次调用求解数组和的方法时，就需要降低其复杂度 使用前缀和可以将复杂度降为\(O(1)\) 使用条件：调用数组求和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="刷题笔记1-数组&#x2F;链表">
+<meta property="og:url" content="http://example.com/2022/09/15/leetcode/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B01%EF%BC%88%E6%95%B0%E7%BB%84%E9%93%BE%E8%A1%A8%EF%BC%89/index.html">
+<meta property="og:site_name" content="ICDE">
+<meta property="og:description" content="前缀和 使用于 数组固定不变  而且需要频繁求和的情况  相关题目： 1、一维数组的区域和检索 303 2、二维数组的区域和检索 304 3、和为k的子数组个数 560  在求解数组和的时候，最普通的方法就是for循环遍历，复杂度为\(O(N)\)。 但是当需要多次调用求解数组和的方法时，就需要降低其复杂度 使用前缀和可以将复杂度降为\(O(1)\) 使用条件：调用数组求和">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-04T17:11:37.556Z">
+<meta property="article:author" content="zhc">
+<meta property="article:tag" content="leetcode">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>刷题笔记1-数组/链表 - ICDE</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/csdn_iconfont/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="ICDE" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ICDE的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="刷题笔记1-数组/链表"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-15 00:00" pubdate>
+          2022年9月15日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          21k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          175 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">刷题笔记1-数组/链表</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前缀和">前缀和</h2>
+<p><font color='blue'>使用于 数组固定不变 
+而且需要频繁求和的情况</font></p>
+<blockquote>
+<p>相关题目：</p>
+<p>1、一维数组的区域和检索 303</p>
+<p>2、二维数组的区域和检索 304</p>
+<p>3、和为k的子数组个数 560</p>
+</blockquote>
+<p>在求解数组和的时候，最普通的方法就是for循环遍历，复杂度为<span
+class="math inline">\(O(N)\)</span>。</p>
+<p>但是当需要多次调用求解数组和的方法时，就需要降低其复杂度</p>
+<p>使用前缀和可以将复杂度降为<span
+class="math inline">\(O(1)\)</span></p>
+<p>使用条件：<strong>调用数组求和方法前数组已经初始化 +
+会调用大量的数组求和方法</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 在初始化的时候构建前缀和数组</span><br><span class="hljs-type">int</span> *preSum = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[len + <span class="hljs-number">1</span>]&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++)&#123;<br>    preSum[i+<span class="hljs-number">1</span>] = preSum[i] + nums[i];<br>&#125;<br><br><span class="hljs-comment">// 返回数组某个范围的和只需要用相应前缀和数组进行相减即可</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">sunRange</span><span class="hljs-params">(<span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> preSum[right+<span class="hljs-number">1</span>] - preSum[left+<span class="hljs-number">1</span>];<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在二维数组（矩阵）中应用时，"前缀和" 就是 某点<span
+class="math inline">\((row, col)\)</span> 到 <span
+class="math inline">\((0,0)\)</span>或者其他定点所围成的区域的和。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* 求解 row1, col1, row2, col2 所围成的区域的和</span><br><span class="hljs-comment">* Sum(row2, col2) - Sum(row2, col1) - Sum(row1, col2) + Su(row1, col1)</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">sumRegion</span><span class="hljs-params">(<span class="hljs-type">int</span> row1, <span class="hljs-type">int</span> col1, <span class="hljs-type">int</span> row2, <span class="hljs-type">int</span> col2)</span></span>&#123;<br>    preMatrix[row2][col2] -<br>               (col1 &gt; <span class="hljs-number">0</span> ? preMatrix[row2][col1 - <span class="hljs-number">1</span>] : <span class="hljs-number">0</span>) -<br>               (row1 &gt; <span class="hljs-number">0</span> ? preMatrix[row1 - <span class="hljs-number">1</span>][col2] : <span class="hljs-number">0</span>) +<br>               (row1 &gt; <span class="hljs-number">0</span> &amp;&amp; col1 &gt; <span class="hljs-number">0</span> ? preMatrix[row1 - <span class="hljs-number">1</span>][col1 - <span class="hljs-number">1</span>] : <span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><font color='red'>和为k的子数组个数</font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 最普通的思路 O(N^3)</span><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) &#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = i; j &lt; len; j++)&#123;<br>        <span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = i; k &lt;= j; k++)&#123;<br>            sum += nums[k];<br>        &#125;<br>        <span class="hljs-keyword">if</span>(sum == k)&#123;<br>            cnt++;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 利用前缀和数组 =&gt; O(N^2)</span><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++)&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; i; j++)&#123;<br>        <span class="hljs-keyword">if</span>(preSum[i] - preSum[j] == k)&#123;<br>            cnt ++;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 【O(N)】</span><br><span class="hljs-comment">// preSum[j] = preSum[i] - k ·········· (1)</span><br>unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; preSum;<br>preSum[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>; <span class="hljs-comment">// 考虑有前缀和=k的qing</span><br><span class="hljs-type">int</span> len = nums.<span class="hljs-built_in">size</span>();<br><span class="hljs-type">int</span> sum_i = <span class="hljs-number">0</span>, sum_j = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++)&#123;<br>    sum_i += nums[i];<br>    sum_j = sum_i - k;<br>    <span class="hljs-keyword">if</span>(preSum.<span class="hljs-built_in">find</span>(sum_j) != preSum.<span class="hljs-built_in">end</span>())&#123; <span class="hljs-comment">// 存在前缀和使得 (1) 成立</span><br>        cnt += preSum[sum_j];<br>    &#125;<br>    <span class="hljs-keyword">if</span>(preSum.<span class="hljs-built_in">find</span>(sum_i) != preSum.<span class="hljs-built_in">end</span>())&#123;<br>        preSum[sum_i] ++;<br>    &#125; <span class="hljs-keyword">else</span>&#123;<br>        preSum[sum_i] = <span class="hljs-number">1</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="差分数组">差分数组</h2>
+<p><font color='blue'>差分数组适用于
+需要频繁对数组的<strong>某个区间做增减</strong>的情况</font></p>
+<blockquote>
+<p>区间加法 370</p>
+<p>航班预定统计 1109</p>
+<p>拼车 1094</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Difference</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    vector&lt;<span class="hljs-type">int</span>&gt; diff;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 初始化差分数组</span><br>    <span class="hljs-built_in">Difference</span>(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums)<br>    &#123;<br>        diff.<span class="hljs-built_in">push_back</span>(nums[<span class="hljs-number">0</span>]);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)<br>        &#123;<br>            diff.<span class="hljs-built_in">push_back</span>(nums[i] - nums[i - <span class="hljs-number">1</span>]);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// [startIndex, endIndex]区间 加和</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">increment</span><span class="hljs-params">(<span class="hljs-type">int</span> startIndex, <span class="hljs-type">int</span> endIndex, <span class="hljs-type">int</span> inc)</span></span><br><span class="hljs-function">    </span>&#123;<br>        diff[startIndex] += inc;<br>        <span class="hljs-keyword">if</span> (endIndex &lt; diff.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>)&#123;<br>            diff[endIndex + <span class="hljs-number">1</span>] -= inc;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 由差分数组得到原数组并返回</span><br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">getResult</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">nums</span><span class="hljs-params">(diff.size())</span></span>;<br>        nums[<span class="hljs-number">0</span>] = diff[<span class="hljs-number">0</span>];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; diff.<span class="hljs-built_in">size</span>(); i++)<br>        &#123;<br>            nums[i] += nums[i - <span class="hljs-number">1</span>] + diff[i];<br>        &#125;<br>        <span class="hljs-keyword">return</span> nums;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>在【航班预定统计】中，对航班人数形成的数组做差分</p>
+<p>在【拼车】中，对每个位置车上的人数形成的数组做差分</p>
+<h2 id="滑动窗口">滑动窗口</h2>
+<p><font color='blue'>一般解决 在字符串中寻找子串 的问题</font></p>
+<blockquote>
+<p>最小覆盖子串 76</p>
+<p>字符串的排列 567</p>
+<p>找到字符串中所有字母异位词 438</p>
+<p>无重复字符最长子串 3</p>
+</blockquote>
+<p>思路：</p>
+<p>1、先用一个map记录满足要求的情况（比如子串中字符类型和数目）</p>
+<p>2、用另一个map记录窗口内的情况（window）[ left, right )</p>
+<p>3、【不断移动右边界，并对window内容<strong>做更新</strong>】 =&gt;
+【在满足<strong>某种情况</strong>时，需要缩减窗口（即移动左边界），并<strong>做更新</strong>】
+（循环这个过程，直到右边界到达字符串边界）</p>
+<p>4、<strong>我们需要的结果在哪里更新？</strong>（移动右边界过程中，还是移动左边界过程中）</p>
+<p><strong><font color='red'>理解窗口缩小背后的含义</font></strong></p>
+<blockquote>
+<p>个人的理解：</p>
+<p>滑动窗口的核心当然在于【窗口】的含义和【滑动】的含义</p>
+<p>一般来说，窗口是帮助我们寻找答案的结构；滑动是我们寻找的答案的过程以及技巧。</p>
+<p>所以，窗口的定义都是比较简单的。</p>
+<p>真正灵活的是窗口的滑动。滑动避免了冗余的循环，大大降低了问题的复杂度</p>
+<p>我们如果使用最一般的方法处理此类问题，首先要确定就是 字符串的开始位置
+和
+结束位置，之前我们使用循环是O(N^2)的复杂度；而使用窗口的滑动，右边界滑动是确定开始位置不断改变结束位置，而左边界滑动是确定结束位置不断改变开始位置，最多只需要对字符串做两次遍历，是O(N)复杂度，当然其中还涉及一些其他的技巧，帮助筛选掉一些情况。</p>
+<p>滑动分为右边界滑动（窗口扩大）和左边界滑动（窗口缩小）</p>
+<p>分别对应着
+什么时候窗口扩大；窗口扩大之后干什么；什么时候窗口缩小；窗口缩小之后干什么</p>
+<p>一般我们都将窗口初始化为 [ 0, 0 )</p>
+<p>窗口扩大是对应于【寻找解】的过程；窗口缩小是对应于【优化解】的过程</p>
+<p>寻找解的过程相对简单，根据问题的类型很容易可以写出相应的代码</p>
+<p>【最难的是】 什么时候进行解的优化，以及怎么做？先根据题目来看看</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 滑动窗口的框架</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">slideWindow</span><span class="hljs-params">(string s1, string s2)</span></span>&#123;<br>    unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; need;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">char</span> c : s1) need[c]++;<br>    <br>    unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; window;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> valid = <span class="hljs-number">0</span>;<br>    <br>    <span class="hljs-keyword">while</span>(right &lt; s2.<span class="hljs-built_in">size</span>())&#123;<br>        <span class="hljs-type">char</span> c = s2[right];<br>        right++;<br>        <br>        <span class="hljs-comment">// ... 窗口扩大时做的更新</span><br>        <br>        <span class="hljs-keyword">while</span>( condition )&#123; <span class="hljs-comment">// 什么时候停止窗口扩大，开始缩减窗口</span><br>            <span class="hljs-type">char</span> d = s2[left];<br>            left++;<br>            <span class="hljs-comment">// ... 窗口缩减时做的操作</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>针对上面的四个例子，具体地阐述一下框架的使用，以及对于那几个问题的思考</p>
+<ul>
+<li>【最小覆盖子串】</li>
+</ul>
+<blockquote>
+<p>在 s 中找到 包含 t 中所有字符的最小子串</p>
+</blockquote>
+<p>1、移动右边界</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp">...<br><span class="hljs-type">char</span> c = s2[right];<br>right++;<br><span class="hljs-comment">// 窗口增大时的更新操作</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">如果加入窗口的这个字符 是need中的字符 (也就是说是 t 中的字符)</span><br><span class="hljs-comment">就将该字符在窗口中的数量+1</span><br><span class="hljs-comment">如果该字符在窗口中的数量 和 在need中的数量一样 (也就是说窗口中该字符满足了t中的要求)</span><br><span class="hljs-comment">valid +1 表示有效的字符数增加 当有效字符数和t中的字符类型数一样的时候 说明此时窗口中满足了要求 包含了t中所有字符</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">if</span>(need.<span class="hljs-built_in">count</span>(c))&#123;<br>    window[c]++;<br>    <span class="hljs-keyword">if</span>(window[c] == need[c])&#123;<br>        valid++;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>2、【窗口中满足要求时】，缩减窗口</p>
+<p><font color='red'>为什么要缩减窗口？为什么要在窗口满足要求的时候缩减窗口？缩减时干什么？</font></p>
+<p>问题是求解【最小子串】</p>
+<p>在右边界不断移动的过程中，可能会有一些不必要的字符被加入窗口中，就会导致窗口中的答案可能不是最小的。比如（"adbc"
+中包含 "bcd"，但是 "a"是无关紧要的，可以从窗口中移除的，应该变为
+"dbc"）就需要对窗口进行缩减才能使得答案更优（局部最优）。</p>
+<p>因为要对解进行优化，首先需要在窗口中出现解，或包含解，才能继续优化，所以需要在窗口满足要求时进行缩减。</p>
+<p>根据前面我们要缩减窗口的原因，在缩减窗口时，我们需要做的就是</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    将字符从左边界移出，直到窗口中刚好不满足要求，此时窗口内的解为局部最优</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">while</span>( valid == need.<span class="hljs-built_in">size</span>() )&#123;<br>    <span class="hljs-type">char</span> d = s2[left];<br>    left++;<br>    <br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">    	如果移出的字符在need中，而且移出前该字符在窗口中的数量刚好满足要求</span><br><span class="hljs-comment">    	移出后，valid --</span><br><span class="hljs-comment">    	window[d] --</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">if</span>(need.<span class="hljs-built_in">count</span>(d))&#123;<br>        <span class="hljs-keyword">if</span>(window[d] == need[d])&#123;<br>            valid--;<br>        &#125;<br>        window[d]--;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>3、由于我们需要的最小子串，那么肯定需要对解进行判断和更新，在哪？</p>
+<p>我们需要的全局最优解，更新的时候肯定是考虑局部最优解，所以自然就应该将答案的更新放在窗口缩小中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">while</span>( valid == need.<span class="hljs-built_in">size</span>() )&#123;<br>    <span class="hljs-comment">// 对答案进行更新</span><br>    <span class="hljs-keyword">if</span>(right - left &lt; len)&#123;<br>        start = left; <br>        len = right - left;<br>    &#125;<br>    <br>    <span class="hljs-type">char</span> d = s2[left];<br>    left++;<br>    <br>    <span class="hljs-keyword">if</span>(need.<span class="hljs-built_in">count</span>(d))&#123;<br>        <span class="hljs-keyword">if</span>(window[d] == need[d])&#123;<br>            valid--;<br>        &#125;<br>        window[d]--;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【字符串的排列】【找到字符串中所有字母异位词】</li>
+</ul>
+<blockquote>
+<p>判断字符串 s1 中是否包含 s2 的排列</p>
+<p>找到字符串 s1 中 s2 所有排列的起始位置</p>
+</blockquote>
+<p>这两个问题的核心是一样的，都是查找字符串的排列</p>
+<p>应用上面的框架，移动右边界寻找解的过程是一致的，区别和难点在于【缩减窗口的时机】和【缩减窗口的操作】</p>
+<p><font color='red'>什么时候缩减窗口</font></p>
+<p>缩减窗口的目的是 优化解。</p>
+<p>所以，可以得出缩减窗口的两个时机就是 1、窗口中包含了解
+2、明显知道窗口中的内容不能满足解，需要对窗口中的内容进行修正。</p>
+<p>这两个时机可以任选一个，就看不同的问题中，哪个时机更加明显。</p>
+<p>对于上一个问题：最小覆盖子串中，时机1是更加明显的，只要窗口中包含了和need中一样的字符和数量（<code>valid == need.size()</code>）；相比之下，时机2是不明显的，【修正解】在这个问题中是需要解先出现的，因为子串可以包含其他字符，在解出现之间都不能知道这个解需不需要被修正。</p>
+<p>而这个问题中，我们很容易就能知道什么时候解需要修正：1、出现了其他字符；（<code>need.count(c) == 0</code>）2、字符数量过多了（窗口的size大于s2的size：<code>right - left &gt; s2.size()</code>）。对于什么时候窗口中包含解，我们是更难以知道的，我们要验证窗口这一块区域，难度更大，也不合适。</p>
+<p>至于缩减窗口的操作，经过思考很容易能够得到，就是将
+字符从左边界移出，并更新window和valid</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/*</span><br><span class="hljs-comment">	出现了其他字符如果没有处理会导致字符数量过多, 所以选择用 rigth - left &gt; s2.size() 来判断</span><br><span class="hljs-comment">	我们需要判断结果的出现，所以将 = 放进了判断中</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">while</span>( right - left &gt;= s2.<span class="hljs-built_in">size</span>() )&#123;<br>    <span class="hljs-keyword">if</span>(valid == need.<span class="hljs-built_in">size</span>())&#123;<br>        <span class="hljs-comment">// 满足情况</span><br>    &#125;<br>    <br>    <span class="hljs-type">char</span> d = s1[left];<br>    left++;<br>    <span class="hljs-keyword">if</span>(need.<span class="hljs-built_in">count</span>(d))&#123;<br>        <span class="hljs-keyword">if</span>(window[d] == need[d])&#123;<br>            valid --;<br>        &#125;<br>        window[d]--;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【无重复字符最长子串】</li>
+</ul>
+<blockquote>
+<p>找到 s 中没有重复字符的最长子串。</p>
+<p>"pwwkew" =&gt; "wke"</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 这道题在框架上更为简单，是一个变种，但是在考虑缩减窗口上还是值得思考一番</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lengthOfLongestSubstring</span><span class="hljs-params">(string s)</span> </span>&#123;<br>    unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; window;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;<br>    <br>    <span class="hljs-keyword">while</span>(right &lt; s.<span class="hljs-built_in">size</span>())&#123;<br>        <span class="hljs-type">char</span> c = s[right];<br>        right++;<br>        window[c]++;<br>        <span class="hljs-comment">/* </span><br><span class="hljs-comment">        	缩减窗口的时机: 存在重复字符</span><br><span class="hljs-comment">        */</span><br>        <span class="hljs-keyword">while</span>(window[c] &gt; <span class="hljs-number">1</span>)&#123;<br>            <span class="hljs-type">char</span> d = s[left];<br>            left++;<br>            window[d]--;<br>        &#125;<br>        len = <span class="hljs-built_in">max</span>(len, right-left);<br>    &#125;<br>    <span class="hljs-keyword">return</span> len;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="二分搜索">二分搜索</h2>
+<p>【二分搜索】是十分常见的算法，其思想十分简单，但是在细节上的处理较为繁琐和复杂。</p>
+<p>下面针对不同的场景和问题来探究一下二分搜索的细节</p>
+<h3 id="二分搜索框架">二分搜索框架</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binarySearchFramework</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = ...<br>    <span class="hljs-built_in">whilie</span>(...)&#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target) &#123;<br>            ...<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)&#123;<br>            right = ...<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &lt; target)&#123;<br>            left = ...<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>...</code> 处就是之后要考虑的细节</li>
+<li><code>left + (right - left) / 2</code> 防止溢出问题</li>
+</ul>
+<h3 id="普通二分搜索">普通二分搜索</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 使用 [left, right] 型的搜索区间</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binarySearch</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">whilie</span>( left &lt;= right )&#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target) &#123;<br>            <span class="hljs-keyword">return</span> mid;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)&#123;<br>            right = mid - <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &lt; target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>right = nums.size() - 1</code> 表示是在
+<code>[left, right]</code> 这样的闭区间中搜索的 =&gt; 所以 while
+中的循环条件是 <code>left &lt;= right</code> 而不是
+<code>left &lt; right</code> 因为 <code>left == right</code>
+时，<code>[left, right]</code>这个区间仍然是可用的。</li>
+<li>在 <code>if-else</code>
+结构中的操作，和搜索区间是统一的。【搜索区间】其实就是可能出现解的区间，问题在于区间的开闭需要统一。比如
+如果要使用闭区间，就要<code>right = nums.size() - 1</code>
+，在更新<code>left</code> 和 <code>right</code>
+的时候也要保证更新后搜索区间是闭区间。相反，如果要使用开区间，就要
+<code>right = nums.size()</code> ，在更新 <code>left</code> 和
+<code>right</code> 时也要保证更新后搜索区间是开区间。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// [left, right) 型搜索区间</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binarySearch</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">// 注意</span><br>    <span class="hljs-keyword">while</span>( left &lt; right )&#123; <span class="hljs-comment">// 注意</span><br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target) &#123;<br>            <span class="hljs-keyword">return</span> mid;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &gt; target)&#123;<br>            right = mid; <span class="hljs-comment">// 注意</span><br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nums[mid] &lt; target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="寻找左侧边界的二分查找">寻找左侧边界的二分查找</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// [left, right] 搜索区间</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">searchLeftBound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; <span class="hljs-comment">// [1]</span><br>    <span class="hljs-keyword">while</span>(left &lt;= right)&#123; <span class="hljs-comment">// [2]</span><br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target)&#123;<br>            right = mid - <span class="hljs-number">1</span>; <span class="hljs-comment">// [3]</span><br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &gt; target)&#123;<br>            right = mid - <span class="hljs-number">1</span>; <span class="hljs-comment">// [4]</span><br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &lt; target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> (left &lt; nums.<span class="hljs-built_in">size</span>() &amp;&amp; nums[left] == target) ? left : <span class="hljs-number">-1</span>; <span class="hljs-comment">// [5]</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>[1]：<code>right = nums.size() - 1</code> 意味着选择 闭区间
+作为搜索区间 <code>[left, right]</code></li>
+<li>[2]：闭区间，有效的循环范围是 <code>left &lt;= right</code>
+或者说终止条件是 <code>left = right + 1</code></li>
+<li>[3]、[4]：保证搜索区间是闭区间（保证搜索区间之间没有重叠）</li>
+<li>[5]：考虑终止条件时，<code>left</code>和<code>right</code>的情况：1、如果<code>nums</code>中存在<code>target</code>，<code>nums[left] == target</code>；2、如果<code>nums</code>中不存在<code>target</code>，<code>left == nums.size() || left == 0</code>。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// [left, right) 搜索区间</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">searchLeftBound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-keyword">while</span>(left &lt; right)&#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target)&#123;<br>            right = mid;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &gt; target)&#123;<br>            right = mid;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &lt; target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> (left &lt; nums.<span class="hljs-built_in">size</span>() &amp;&amp; nums[left] == target) ? left : <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="寻找右侧边界的二分查找">寻找右侧边界的二分查找</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 使用 [left, right] 闭区间</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">searchRightBound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span>(left &lt;= right)&#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &gt; target)&#123;<br>            right = mid - <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &lt; target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> (right &gt;= <span class="hljs-number">0</span> &amp;&amp; nums[right] == target) ? right : <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>重点说一下<code>return</code>：查找右边界的情况要些许复杂一点，和搜索区间的开闭有一定的关系。对于闭区间，终止条件是
+<code>left == right + 1</code>，经过简单的推理可以知道如果nums中存在target的话，nums[right]
+==
+target；如果不存在的话，<code>right == -1 || right = nums.size() - 1</code>，分别对应于<code>target</code>小于全部<code>nums</code>元素和大于全部<code>nums</code>元素。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 使用 [left, right) 开区间</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">searchRightBound</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-keyword">while</span>(left &lt; right)&#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">if</span>(nums[mid] == target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &gt; target)&#123;<br>            right = mid;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid] &lt; target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> (right &gt; <span class="hljs-number">0</span> &amp;&amp; nums[right - <span class="hljs-number">1</span>] == target) ? right - <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>而对于开区间，如果<code>nums</code>中存在<code>target</code>，<code>nums[right - 1] == target</code>
+（因为是开区间，<code>right</code>位置的值是取不到的，所以需要减一）；如果不存在的话，<code>right == 0 || right == nums.size()</code>，同样分别对应于<code>target</code>小于全部<code>nums</code>元素和大于全部<code>nums</code>元素。</li>
+</ul>
+<h3 id="二分搜索的题型解析">二分搜索的题型解析</h3>
+<p>从上面的例子可以看出，我们使用二分搜索的情景一般如下：【有序数组】、【查找元素或元素边界】</p>
+<p>但是这大大限制了二分搜索的使用，下面我们对二分搜索使用的场景做一下抽象和总结。</p>
+<p>首先，我们还是把眼光放到二分搜索的最普通的场景上。其实对二分搜索最重要的是【有序数组】，只有数组是有序的，我们才能根据中间位置的情况一次筛除掉一半的元素，以达到<span
+class="math inline">\(lg(n)\)</span>的时间复杂度。</p>
+<p>其实，【有序数组】本质上是【单调】，二分搜索之所以可以达到<span
+class="math inline">\(lg(n)\)</span>的复杂度，就是利用了【单调】的性质。</p>
+<p>进一步泛化，我们可以将上述情景抽象成</p>
+<blockquote>
+<p>存在一个单调函数 f(x) ，给定 一个值 target ，返回 令 f(x) = target
+成立的 x</p>
+<p>（这个单调函数其实就是返回下标x对应的nums数组中的值）</p>
+</blockquote>
+<p>所以，如果我们可以从题目中抽象出</p>
+<p>1、自变量 x</p>
+<p>2、建立在 x 上的单调函数</p>
+<p>3、一个target</p>
+<p>我们就可以使用二分搜索</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">f</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> x)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> nums[x];<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binarySearch</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">whilie</span>(left &lt;= right)&#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-type">int</span> res = <span class="hljs-built_in">f</span>(nums, mid);<br>        <span class="hljs-keyword">if</span>(res == target) &#123;<br>            <span class="hljs-keyword">return</span> mid;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (res &gt; target)&#123;<br>            right = mid - <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (res &lt; target)&#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>下面通过三个题目来具体讲解一下</p>
+<ul>
+<li>【875.爱吃香蕉的珂珂】</li>
+</ul>
+<blockquote>
+<p>珂珂喜欢吃香蕉。这里有 <code>n</code> 堆香蕉，第 <code>i</code>
+堆中有 <code>piles[i]</code> 根香蕉。警卫已经离开了，将在 <code>h</code>
+小时后回来。</p>
+<p>珂珂可以决定她吃香蕉的速度 <code>k</code>
+（单位：根/小时）。每个小时，她将会选择一堆香蕉，从中吃掉 <code>k</code>
+根。如果这堆香蕉少于 <code>k</code>
+根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。</p>
+<p>珂珂喜欢慢慢吃，但仍然想在警卫回来前吃掉所有的香蕉。</p>
+<p>返回她可以在 <code>h</code> 小时内吃掉所有香蕉的最小速度
+<code>k</code>（<code>k</code> 为整数）。</p>
+</blockquote>
+<p>分析：</p>
+<ol type="1">
+<li><p>x：吃香蕉的速度 k</p></li>
+<li><p>f(x)：在k的吃香蕉速度下，需要的时间</p>
+<p><strong><span class="math inline">\(f(x) = \sum_{i=1}^{n} \lceil
+\frac{piles[i]}{x} \rceil\)</span></strong></p>
+<p>很明显是一个单调函数</p></li>
+<li><p>target：f(x) &lt;= h</p></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minEatingSpeed</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; piles, <span class="hljs-type">int</span> h)</span> </span>&#123;<br>        <span class="hljs-comment">// 1 确定 吃香蕉速度 x 的区间 [low, high]</span><br>        <span class="hljs-type">int</span> low = <span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> max = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> pile : piles) &#123;<br>            <span class="hljs-keyword">if</span> (max &lt; pile) &#123;<br>                max = pile;<br>            &#125;<br>        &#125;<br>        <span class="hljs-type">int</span> high = max;<br>        <br>        <span class="hljs-comment">// 2 二分搜索</span><br>        <span class="hljs-keyword">while</span> (low &lt;= high) &#123;<br>            <span class="hljs-type">int</span> mid = low + (high - low) / <span class="hljs-number">2</span>;<br>            <span class="hljs-type">long</span> hours = <span class="hljs-built_in">timeCost</span>(piles, mid);<br>            <span class="hljs-keyword">if</span> (hours &lt;= h) &#123;<br>                high = mid - <span class="hljs-number">1</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (hours &gt; h) &#123;<br>                low = mid + <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> low;<br>    &#125;<br><br>    <span class="hljs-comment">// f(x)</span><br>    <span class="hljs-function"><span class="hljs-type">long</span> <span class="hljs-title">timeCost</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>        <span class="hljs-type">long</span> hours = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">double</span> speed = k;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++) &#123;<br>            hours += <span class="hljs-built_in">ceil</span>(nums[i] / speed);<br>        &#125;<br>        <span class="hljs-keyword">return</span> hours;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【1011.在-d-天内送达包裹的能力】</li>
+</ul>
+<blockquote>
+<p>传送带上的包裹必须在 <code>days</code>
+天内从一个港口运送到另一个港口。</p>
+<p>传送带上的第 <code>i</code> 个包裹的重量为
+<code>weights[i]</code>。每一天，我们都会按给出重量（<code>weights</code>）的顺序往传送带上装载包裹。我们装载的重量不会超过船的最大运载重量。</p>
+<p>返回能在 <code>days</code>
+天内将传送带上的所有包裹送达的船的最低运载能力。</p>
+</blockquote>
+<p>分析：</p>
+<ol type="1">
+<li><p>x：船的运载能力</p></li>
+<li><p>f(x)：船的运载能力对应的需要的天数</p>
+<p>这个比较明显，很容易想到，船的运载能力越大，需要的天数肯定不会越多，应该是
+非递增函数。</p></li>
+<li><p>target：f(x) &lt;= days</p></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">shipWithinDays</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; weights, <span class="hljs-type">int</span> days)</span> </span>&#123;<br>        <span class="hljs-comment">// 船的最低承载能力不能小于weights数组中最大的元素</span><br>        <span class="hljs-comment">// 最高承载能力只要是weights数组元素之和即可</span><br>        <span class="hljs-type">int</span> low = <span class="hljs-number">0</span>, high = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> weight : weights) &#123;<br>            low = <span class="hljs-built_in">max</span>(weight, low);<br>            high += weight;<br>        &#125;<br>        <br>        <span class="hljs-keyword">while</span> (low &lt;= high) &#123;<br>            <span class="hljs-type">int</span> mid = low + (high - low) / <span class="hljs-number">2</span>;<br>            <span class="hljs-type">int</span> day = <span class="hljs-built_in">daysNeeded</span>(weights, mid);<br>            <span class="hljs-keyword">if</span> (day &lt;= days) &#123;<br>                high = mid - <span class="hljs-number">1</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (day &gt; days) &#123;<br>                low = mid + <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br>        <br>        <span class="hljs-keyword">return</span> low;<br>    &#125;<br><br>    <span class="hljs-comment">// f(x) 某运载能力下，需要的天数</span><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">daysNeeded</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; weights, <span class="hljs-type">int</span> capacity)</span> </span>&#123;<br>        <span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> days = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> weight : weights) &#123;<br>            <span class="hljs-keyword">if</span> (sum + weight &gt; capacity) &#123;<br>                days++;<br>                sum = weight;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                sum += weight;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (sum &gt; <span class="hljs-number">0</span>) days++;<br>        <span class="hljs-keyword">return</span> days;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【410.分割数组的最大值】</li>
+</ul>
+<blockquote>
+<p>给定一个非负整数数组 <code>nums</code> 和一个整数 <code>m</code>
+，你需要将这个数组分成 <code>m</code> 个非空的连续子数组。</p>
+<p>设计一个算法使得这 <code>m</code> 个子数组各自和的最大值最小。</p>
+</blockquote>
+<p>这道题在f(x)的选择上比较巧妙</p>
+<p>【分析】</p>
+<p>首先，划分成多少个子数组（m）是确定的，子数组和的最大值只是跟划分方式有关。但是划分方式又不好用数表示出来，所以想写成
+子数组和的最大值关于划分方式的函数 肯定是行不通的。</p>
+<p>其次，我们要写成 f(x) 的形式，其中 x
+肯定是数。在这道题中，唯一会变化的数就是子数组的和的最大值。所以大概可以确定，x
+就是子数组和的最大值。</p>
+<p>那 f(x)
+是什么呢？根据题意大概就是【是否存在某种划分方式使得子数组和的最大值=x】这样的函数，得到的是
+0 和 1。只要这个函数以某个分界点一边是0一边是1，也是一种单调函数。</p>
+<p>但是很遗憾，【是否存在某种划分方式使得子数组和的最大值=x】这个函数得到的0/1分布是散乱的。</p>
+<p>下面这个就是最有技巧的一步了：<font color='red'>【是否存在某种划分方式使得子数组和的最大值
+&lt;= x】</font></p>
+<p>这个函数得到的0/1分布就是以某个点为分界线的，是单调的。</p>
+<ol type="1">
+<li>x：子数组和的最大值</li>
+<li>f(x)：是否存在某种划分方式使得子数组和的最大值 &lt;= x</li>
+<li>target：f(x) == 1</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">splitArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> m)</span> </span>&#123;<br>        <span class="hljs-comment">// 1 判断 x 的范围: 数组nums的最大值 - 数组nums的元素之和</span><br>        <span class="hljs-type">int</span> low = <span class="hljs-number">0</span>, high = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123;<br>            low = <span class="hljs-built_in">max</span>(num, low);<br>            high += num;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 2 二分搜索</span><br>        <span class="hljs-keyword">while</span> (low &lt;= high) &#123;<br>            <span class="hljs-type">int</span> mid = low + (high - low) / <span class="hljs-number">2</span>;<br>            <span class="hljs-type">bool</span> res = <span class="hljs-built_in">isExist</span>(nums, m, mid);<br>            <span class="hljs-keyword">if</span> (res == <span class="hljs-literal">true</span>) &#123;<br>                high = mid - <span class="hljs-number">1</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (res == <span class="hljs-literal">false</span>) &#123;<br>                low = mid + <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> low;<br>    &#125;<br><br>    <span class="hljs-comment">// 判断是否存在一种分割方式使得子数组的和的最大值&lt;=x</span><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 相反的思路: 将数组尽可能少的分成和小于x的子数组，如果最终得到的子数组数 &lt;= m(要求划分的子数组个数), 那么就是c</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isExist</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> m, <span class="hljs-type">int</span> max)</span> </span>&#123;<br>        <span class="hljs-type">long</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> cnt = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123;<br>            <span class="hljs-keyword">if</span> (sum + num &gt; max) &#123;<br>                cnt++;<br>                sum = num;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                sum += num;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (sum &gt; <span class="hljs-number">0</span>) cnt++;<br>        <span class="hljs-keyword">return</span> cnt &lt;= m;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="在两个数组中寻找第k个元素">在两个数组中寻找第k个元素</h3>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/median-of-two-sorted-arrays/">4.
+寻找两个正序数组的中位数</a></p>
+</blockquote>
+<p>这道题使用二分查找的话，可以将问题转化成
+【在两个有序数组中寻找第k小的元素】</p>
+<p>【思路】是对<code>k</code>做二分。每次向前走<code>k/2-1</code>个元素，直到数组末尾，这样一次比较就可以排除<code>k/2</code>个元素，就是更小的那个元素对应数组走的那<code>k/2</code>个元素。</p>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230304120343432.png" srcset="/img/loading.gif" lazyload
+alt="过程" />
+<figcaption aria-hidden="true">过程</figcaption>
+</figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// nums1和nums2为两个有序数组</span><br><span class="hljs-comment">// 需要找到两个数组中第k小的元素 注意第1小的元素应该是0为下标</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">findKthElement</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums1, vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums2, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>    <span class="hljs-type">int</span> m = nums1.<span class="hljs-built_in">size</span>(), n = nums2.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-type">int</span> index1 = <span class="hljs-number">0</span>, index2 = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)&#123;<br>        <span class="hljs-comment">// 一个数组已经遍历完，直接去另一个数组的对应区间中找</span><br>        <span class="hljs-keyword">if</span> (index1 &gt;= m) <span class="hljs-keyword">return</span> nums[index2+k<span class="hljs-number">-1</span>];<br>        <span class="hljs-keyword">if</span> (index2 &gt;= n) <span class="hljs-keyword">return</span> nums[index1+k<span class="hljs-number">-1</span>];<br>        <span class="hljs-comment">// base case 选择两个数组当前走到位置里更小的一个</span><br>        <span class="hljs-keyword">if</span> (k == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-built_in">min</span>(nums1[index1], nums2[index2]);<br>        <br>        <span class="hljs-comment">// 需要考虑是否会超出数组长度</span><br>        <span class="hljs-type">int</span> newIndex1 = <span class="hljs-built_in">min</span>(index1+k/<span class="hljs-number">2</span>, m) - <span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> newIndex2 = <span class="hljs-built_in">min</span>(index2+k/<span class="hljs-number">2</span>, n) - <span class="hljs-number">1</span>;<br>        <br>        <span class="hljs-keyword">if</span> (nums1[newIndex1] &gt;= nums2[newIndex2]) &#123;<br>            k -= (newIndex2 - index2 + <span class="hljs-number">1</span>);<br>            index2 = newIndex2 + <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            k -= (newIndex1 - index1 + <span class="hljs-number">1</span>);<br>            index1 = newIndex1 + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="田忌赛马">田忌赛马</h2>
+<blockquote>
+<p>优势洗牌 870</p>
+</blockquote>
+<p>算法思想：<font color='red'><strong>如果没办法赢
+就用最差的去输</strong></font></p>
+<blockquote>
+<p>给定两个大小相等的数组 <code>nums1</code> 和
+<code>nums2</code>，<code>nums1</code> 相对于 <code>nums</code>
+的<em>优势</em>可以用满足 <code>nums1[i] &gt; nums2[i]</code> 的索引
+<code>i</code> 的数目来描述。</p>
+<p>返回 nums1 的<strong>任意</strong>排列，使其相对于 <code>nums2</code>
+的优势最大化。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-type">const</span> pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&amp; p1, <span class="hljs-type">const</span> pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&amp; p2)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> p1.second &lt; p2.second;<br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">advantageCount</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums1, vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums2)</span> </span>&#123;<br>        <span class="hljs-comment">// 1 由于最终的结果是根据nums2的原始顺序的，所以不能直接对nums2进行排序，需要使用priority_queue进行排序</span><br>        vector&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt; v;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums2.<span class="hljs-built_in">size</span>(); i++) &#123;<br>            v.<span class="hljs-built_in">push_back</span>(&#123;i, nums2[i]&#125;);<br>        &#125;<br>        <span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), cmp);<br>        <span class="hljs-comment">// 2 排序nums1</span><br>        <span class="hljs-built_in">sort</span>(nums1.<span class="hljs-built_in">begin</span>(), nums1.<span class="hljs-built_in">end</span>());<br>        <span class="hljs-comment">// 3 使用双指针进行遍历</span><br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">res</span><span class="hljs-params">(nums1.size())</span></span>;<br>        <span class="hljs-type">int</span> right = nums1.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>, left = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> index = right;<br><br>        <span class="hljs-keyword">while</span> (index &gt;= <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-comment">// 有优势</span><br>            <span class="hljs-keyword">if</span> (nums1[right] &gt; v[index].second) &#123;<br>                res[v[index].first] = nums1[right];<br>                right--;<br>            &#125; <span class="hljs-keyword">else</span> &#123;  <span class="hljs-comment">// 没有优势</span><br>                res[v[index].first] = nums1[left];<br>                left++;<br>            &#125;<br>            index--;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="原地修改数组">原地修改数组</h2>
+<blockquote>
+<p>删除有序数组中的重复项 26</p>
+<p>删除排序链表中的重复元素 83</p>
+<p>移除元素 27</p>
+<p>移动零 283</p>
+</blockquote>
+<h3 id="快慢指针">快慢指针</h3>
+<blockquote>
+<p>让快指针在前面探路，当快指针所指向的值和慢指针不同时，则将慢指针向前移动并更新其值为快指针所指向的值</p>
+</blockquote>
+<ul>
+<li>【删除有序数组中的重复项】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> slow = <span class="hljs-number">0</span>, fast = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(fast != nums.<span class="hljs-built_in">size</span>())&#123;<br>        <span class="hljs-keyword">if</span>(nums[slow] != nums[fast])&#123;<br>            slow ++;<br>            nums[slow] = nums[fast];<br>        &#125;<br>        fast++;<br>    &#125;<br>    <span class="hljs-keyword">return</span> slow + <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【删除排序链表中的重复元素】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">ListNode* <span class="hljs-title">deleteDuplicates</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(head == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    ListNode* slow = head, * fast = head;<br>    <span class="hljs-keyword">while</span>(fast != <span class="hljs-literal">nullptr</span>)&#123;<br>        <span class="hljs-keyword">if</span>(fast-&gt;val != slow-&gt;val)&#123;<br>            slow-&gt;next = fast;<br>            slow = slow-&gt;next;<br>        &#125;<br>        fast = fast-&gt;next;<br>    &#125;<br>    slow-&gt;next = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-keyword">return</span> head;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【移除元素】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeElement</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> val)</span> </span>&#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-keyword">if</span> (nums[left] == val) &#123;<br>            nums[left] = nums[right];<br>            right--;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            left++;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 快慢指针</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeElement</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> val)</span> </span>&#123;<br>    <span class="hljs-type">int</span> slow = <span class="hljs-number">0</span>, fast = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (fast != nums.<span class="hljs-built_in">size</span>()) &#123;<br>        <span class="hljs-keyword">if</span> (nums[fast] != val) &#123;<br>            nums[slow] = nums[fast];<br>            slow++;<br>        &#125;<br>        fast++;<br>    &#125;<br>    <span class="hljs-keyword">return</span> slow;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【移除零】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/*</span><br><span class="hljs-comment">	移除0元素 + 末尾修改成0</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">moveZeroes</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> len = <span class="hljs-built_in">removeElement</span>(nums, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">for</span>(; len &lt; nums.<span class="hljs-built_in">size</span>(); len++)&#123;<br>        nums[len] = <span class="hljs-number">0</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// ku&#x27;ao</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">moveZeroes</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> slow = <span class="hljs-number">0</span>, fast = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (fast != nums.<span class="hljs-built_in">size</span>()) &#123;<br>        <span class="hljs-keyword">if</span> (nums[fast] != <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-comment">// swap</span><br>            <span class="hljs-type">int</span> tmp = nums[slow];<br>            nums[slow] = nums[fast];<br>            nums[fast] = tmp;<br>            <br>            slow++;<br>        &#125;<br>        fast++;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="单链表问题">单链表问题</h2>
+<blockquote>
+<p>合并两个有序链表 21</p>
+<p>合并K个升序链表 23</p>
+<p>环形链表 141</p>
+<p>环形链表Ⅱ 142</p>
+<p>链表的中间节点 876 =&gt; 快慢指针 fast指针走2步，slow指针走1步</p>
+<p>相交链表 160</p>
+<p>删除链表的倒数第N个节点 19 =&gt; 双指针
+一个指针先走n步，再两个指针同时走</p>
+</blockquote>
+<ul>
+<li>【合并两个有序链表】</li>
+</ul>
+<p>采用双指针 + <font color='red'><strong>dummy
+头结点</strong></font></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">ListNode* <span class="hljs-title">mergeTwoLists</span><span class="hljs-params">(ListNode* list1, ListNode* list2)</span> </span>&#123;<br>    ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-1</span>);<br>    ListNode *p = dummy, *p1 = list1, *p2 = list2;<br>    <span class="hljs-keyword">while</span> (p1 != <span class="hljs-literal">nullptr</span> &amp;&amp; p2 != <span class="hljs-literal">nullptr</span>) &#123;<br>        <span class="hljs-keyword">if</span> (p1-&gt;val &gt; p2-&gt;val) &#123;<br>            p-&gt;next = p2;<br>            p2 = p2-&gt;next;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            p-&gt;next = p1;<br>            p1 = p1-&gt;next;<br>        &#125;<br>        p = p-&gt;next;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (p1 != <span class="hljs-literal">nullptr</span>) &#123;<br>        p-&gt;next = p1;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (p2 != <span class="hljs-literal">nullptr</span>) &#123;<br>        p-&gt;next = p2;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> dummy-&gt;next;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【合并k个升序链表】</li>
+</ul>
+<p>前一道题的升级版。难度在于如何快速找到 k 个 ListNode 中的最小结点
+=&gt; 使用 priority_queue 最小堆</p>
+<p>算法时间复杂度是 <span class="math inline">\(O(NlgK)\)</span></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">cmp</span> &#123;<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(ListNode* p1, ListNode* p2)</span> </span>&#123; <span class="hljs-keyword">return</span> p1-&gt;val &gt; p2-&gt;val; &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>   <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">mergeKLists</span><span class="hljs-params">(vector&lt;ListNode*&gt;&amp; lists)</span> </span>&#123;<br>        <span class="hljs-comment">// 最小堆</span><br>        priority_queue&lt;ListNode*, vector&lt;ListNode*&gt;, cmp&gt; q;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; lists.<span class="hljs-built_in">size</span>(); i++) &#123;<br>            <span class="hljs-keyword">if</span> (lists[i] != <span class="hljs-literal">nullptr</span>) q.<span class="hljs-built_in">push</span>(lists[i]);<br>        &#125;<br><br>        ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-1</span>);<br>        ListNode* p = dummy;<br>        <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>()) &#123;<br>            ListNode* t = q.<span class="hljs-built_in">top</span>();<br>            q.<span class="hljs-built_in">pop</span>();<br>            p-&gt;next = t;<br>            p = p-&gt;next;<br>            <span class="hljs-comment">// 该链表的下一个元素，加入堆中</span><br>            <span class="hljs-keyword">if</span> (t-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>                t = t-&gt;next;<br>                q.<span class="hljs-built_in">push</span>(t);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dummy-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【删除链表的倒数第N个节点】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">ListNode* <span class="hljs-title">removeNthFromEnd</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">-1</span>);<br>    dummy-&gt;next = head;<br>    ListNode *p1 = head, *p2 = dummy;<br>    <span class="hljs-comment">// p1先向前走n步</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>        p1 = p1-&gt;next;<br>    &#125;<br>    <span class="hljs-comment">// p1和p2一起向前走 直到p1走到链表末尾</span><br>    <span class="hljs-keyword">while</span> (p1 != <span class="hljs-literal">nullptr</span>) &#123;<br>        p1 = p1-&gt;next;<br>        p2 = p2-&gt;next;<br>    &#125;<br>    p2-&gt;next = p2-&gt;next-&gt;next;<br>    <span class="hljs-keyword">return</span> dummy-&gt;next;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【链表的中间节点】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 快慢指针</span><br><span class="hljs-function">ListNode* <span class="hljs-title">middleNode</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>    ListNode *fast = head, *slow = head;<br>    <span class="hljs-comment">// fast一次走两步 slow一次走一步</span><br>    <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>        slow = slow-&gt;next;<br>        fast = fast-&gt;next;<br>        fast = fast-&gt;next;<br>    &#125;<br>    <span class="hljs-keyword">return</span> slow;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【环形链表】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">hasCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>    ListNode *fast = head, *slow = head;<br>    <span class="hljs-comment">// fast 一次走两部 slow 一次走一步</span><br>    <span class="hljs-comment">// 由于fast更快 只要存在环 fast和slow一定会相遇</span><br>    <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>        slow = slow-&gt;next;<br>        fast = fast-&gt;next-&gt;next;<br>        <span class="hljs-keyword">if</span> (slow == fast) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【环形链表Ⅱ】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">ListNode *<span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode *head)</span> </span>&#123;<br>    <span class="hljs-type">bool</span> hasCycle = <span class="hljs-literal">false</span>;<br>    ListNode *fast = head, *slow = head;<br>    <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>        slow = slow-&gt;next;<br>        fast = fast-&gt;next-&gt;next;<br>        <span class="hljs-keyword">if</span> (slow == fast) &#123;<br>            hasCycle = <span class="hljs-literal">true</span>;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (!hasCycle) <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    <br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">    	设 s 是环的起点到链表起点的距离 l 是相遇点到环的起点的距离</span><br><span class="hljs-comment">    	易知 慢指针走过的距离为 s + l 快指针走过的是 2(s + l)</span><br><span class="hljs-comment">    	又 快指针比慢指针多走一个环的长度</span><br><span class="hljs-comment">    	所以 2(s+l) - (s+l) = n</span><br><span class="hljs-comment">    	s + l = n</span><br><span class="hljs-comment">    	=&gt; s = n - l</span><br><span class="hljs-comment">    	所以 让慢指针回到链表起点 快指针继续向前 以相同的速度走 最后会在环的起点相遇</span><br><span class="hljs-comment">    */</span><br>    slow = head;<br>    <span class="hljs-keyword">while</span> (slow != fast) &#123;<br>        slow = slow-&gt;next;<br>        fast = fast-&gt;next;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> slow;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>【相交链表】</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/*</span><br><span class="hljs-comment">	设A链表与B链表相交的部分长度为 m</span><br><span class="hljs-comment">	A链表剩余部分长度为 x B链表剩余部分长度为 y</span><br><span class="hljs-comment">	</span><br><span class="hljs-comment">	让 p1 先走A链表 走完再走B链表</span><br><span class="hljs-comment">	p2 先走B链表 走完再走A链表</span><br><span class="hljs-comment">	</span><br><span class="hljs-comment">	如果存在相交部分 那么就会在相交的起点相遇 因为走的距离都为 x + y + m</span><br><span class="hljs-comment">	如果不存在相交部分 那么就会使得 p1 p2 都为 nullptr</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function">ListNode *<span class="hljs-title">getIntersectionNode</span><span class="hljs-params">(ListNode *headA, ListNode *headB)</span> </span>&#123;<br>    ListNode *p1 = headA, *p2 = headB;<br>    <span class="hljs-keyword">while</span> (p1 != p2) &#123;<br>        <span class="hljs-keyword">if</span> (p1 == <span class="hljs-literal">nullptr</span>)<br>            p1 = headB;<br>        <span class="hljs-keyword">else</span><br>            p1 = p1-&gt;next;<br><br>        <span class="hljs-keyword">if</span> (p2 == <span class="hljs-literal">nullptr</span>)<br>            p2 = headA;<br>        <span class="hljs-keyword">else</span><br>            p2 = p2-&gt;next;<br>    &#125;<br>    <span class="hljs-keyword">return</span> p1;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="链表操作递归思想">链表操作递归思想</h2>
+<blockquote>
+<p>反转链表 206</p>
+<p>反转链表 Ⅱ 92</p>
+</blockquote>
+<ul>
+<li>反转整个链表</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">ListNode* <span class="hljs-title">reverse</span><span class="hljs-params">(ListNode* head)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(head == <span class="hljs-literal">nullptr</span> || head-&gt;next == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">return</span> head;<br>    ListNode* p = <span class="hljs-built_in">reverse</span>(head-&gt;next);<br>    <span class="hljs-comment">// 把后一个结点的next指针指向当前的节点(head)</span><br>    head-&gt;next-&gt;next = head;<br>    head-&gt;next = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-keyword">return</span> p;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>反转链表的前n个结点</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp">ListNode* successor = <span class="hljs-literal">nullptr</span>;<br><span class="hljs-function">ListNode* <span class="hljs-title">reverseN</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> n)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(n == <span class="hljs-number">1</span>)&#123;<br>        successor = head-&gt;next;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br>    ListNode* p = <span class="hljs-built_in">reverseN</span>(head-&gt;next, --n);<br>    head-&gt;next-&gt;next = head;<br>    head-&gt;next = successor; <span class="hljs-comment">// 改变每次的后继 使得反转后的最后一个结点指向链表剩余部分(n+1个结点)</span><br>    <span class="hljs-keyword">return</span> p;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>反转链表的一部分</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">ListNode* <span class="hljs-title">reverseBetween</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(left == <span class="hljs-number">1</span>)&#123; <span class="hljs-comment">// 就是反转前n个结点</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">reverseN</span>(head, right-left+<span class="hljs-number">1</span>);<br>    &#125;<br>    <span class="hljs-comment">// 向前di&#x27;gui</span><br>    head-&gt;next = <span class="hljs-built_in">reverseBetween</span>(head-&gt;next, left<span class="hljs-number">-1</span>, right<span class="hljs-number">-1</span>);<br>    <span class="hljs-keyword">return</span> head;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="category-chain-item">leetcode刷题笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/leetcode/">#leetcode</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>刷题笔记1-数组/链表</div>
+      <div>http://example.com/2022/09/15/leetcode/刷题笔记1（数组链表）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>zhc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/15/leetcode/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%EF%BC%88%E5%9B%BE%E8%AE%BA%EF%BC%89/" title="刷题笔记6-图论">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">刷题笔记6-图论</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/15/leetcode/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B04%EF%BC%88%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%89/" title="刷题笔记4-二叉树">
+                        <span class="hidden-mobile">刷题笔记4-二叉树</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

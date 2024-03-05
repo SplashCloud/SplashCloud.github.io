@@ -1,0 +1,743 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="实验内容：编写SysY语言的语法分析器，并实现高亮。  实验思路 首先需要根据SysY语言定义编写Parser，这部分基本上就是将手册上的语法规则改写成Antrl语句即可。 然后就可以到Main类中编写相应的逻辑： 123456789101112131415161718192021222324public static void main(String[] args) throws">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理-Lab2">
+<meta property="og:url" content="http://example.com/2022/11/24/compilation-principle/compilation-principle-lab2/index.html">
+<meta property="og:site_name" content="ICDE">
+<meta property="og:description" content="实验内容：编写SysY语言的语法分析器，并实现高亮。  实验思路 首先需要根据SysY语言定义编写Parser，这部分基本上就是将手册上的语法规则改写成Antrl语句即可。 然后就可以到Main类中编写相应的逻辑： 123456789101112131415161718192021222324public static void main(String[] args) throws">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-04T17:11:35.792Z">
+<meta property="article:author" content="zhc">
+<meta property="article:tag" content="编译原理">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>编译原理-Lab2 - ICDE</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/csdn_iconfont/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="ICDE" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ICDE的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="编译原理-Lab2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-24 00:00" pubdate>
+          2022年11月24日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">编译原理-Lab2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><a
+target="_blank" rel="noopener" href="http://47.122.3.40:8081/#/lab2-parser/lab2-parser">实验内容</a>：编写SysY语言的语法分析器，并实现高亮。</p>
+</blockquote>
+<h2 id="实验思路">实验思路</h2>
+<p>首先需要根据<a
+target="_blank" rel="noopener" href="https://github.com/courses-at-nju-by-hfwei/compilers-lab-docs/raw/main/docs/docs/SysY%E8%AF%AD%E8%A8%80%E5%AE%9A%E4%B9%89.pdf">SysY语言定义</a>编写Parser，这部分基本上就是将手册上的语法规则改写成<code>Antrl</code>语句即可。</p>
+<p>然后就可以到<code>Main</code>类中编写相应的逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-keyword">if</span>(args.length == <span class="hljs-number">0</span>)&#123;<br>            System.err.println(<span class="hljs-string">&quot;input path is required&quot;</span>);<br>        &#125;<br>        <span class="hljs-comment">// get input file and generate the Lexer</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">source</span> <span class="hljs-operator">=</span> args[<span class="hljs-number">0</span>];<br>        <span class="hljs-type">CharStream</span> <span class="hljs-variable">input</span> <span class="hljs-operator">=</span> CharStreams.fromFileName(source);<br>        <span class="hljs-type">SysYLexer</span> <span class="hljs-variable">sysYLexer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SysYLexer</span>(input);<br><br>        <span class="hljs-comment">// generate the Parser</span><br>        <span class="hljs-type">CommonTokenStream</span> <span class="hljs-variable">tokens</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CommonTokenStream</span>(sysYLexer);<br>        <span class="hljs-type">SysYParser</span> <span class="hljs-variable">sysYParser</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SysYParser</span>(tokens);<br><br>        <span class="hljs-type">Visitor</span> <span class="hljs-variable">visitor</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Visitor</span>();<br><br>        <span class="hljs-comment">// add error listener</span><br>        sysYParser.removeErrorListeners();<br>        <span class="hljs-type">MyParserErrorListener</span> <span class="hljs-variable">myParserErrorListener</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyParserErrorListener</span>(visitor);<br>        sysYParser.addErrorListener(myParserErrorListener);<br><br>        <span class="hljs-comment">// DFS the tree</span><br>        <span class="hljs-type">ParseTree</span> <span class="hljs-variable">tree</span> <span class="hljs-operator">=</span> sysYParser.program();<br>        visitor.visit(tree);<br>    &#125;<br></code></pre></td></tr></table></figure>
+<p>类似于Lab1，需要实现一个自定义的<code>ErrorListener</code>，传递给<code>Parser</code>，使得在发现语法错误时执行报错输出。</p>
+<blockquote>
+<p>为什么要传递<code>Visitor</code>?</p>
+<p>由于一旦出现语法错误，就不需要打印语法树了，所以需要在<code>ErrorListener</code>监听到语法错误时让<code>Visitor</code>不要做输出。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyParserErrorListener</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">BaseErrorListener</span>&#123;<br>    Visitor visitor;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MyParserErrorListener</span><span class="hljs-params">(Visitor v)</span>&#123; <span class="hljs-built_in">this</span>.visitor = v; &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">syntaxError</span><span class="hljs-params">(Recognizer&lt;?, ?&gt; recognizer,</span><br><span class="hljs-params">                            Object offendingSymbol,</span><br><span class="hljs-params">                            <span class="hljs-type">int</span> line,</span><br><span class="hljs-params">                            <span class="hljs-type">int</span> charPositionInLine,</span><br><span class="hljs-params">                            String msg,</span><br><span class="hljs-params">                            RecognitionException e)</span><br>    &#123;<br>        <span class="hljs-built_in">this</span>.visitor.hasError = <span class="hljs-literal">true</span>;<br>        System.err.println(<span class="hljs-string">&quot;Error type B at Line &quot;</span> + line + <span class="hljs-string">&quot;: &quot;</span> + msg);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>最后也是最关键的，编写继承自<code>SysYParserBaseVisitor&lt;Void&gt;</code>的<code>Visitor</code>，实现打印语法树以及高亮的功能。</p>
+<ol type="1">
+<li>如何打印节点信息：在<code>visitChildren</code>和<code>visitTerminal</code>两个函数中，调用参数<code>node</code>的相关方法就可以获得<code>type</code>、<code>text</code>等信息。</li>
+<li>如何实现缩进：存在<code>depth</code>字段，调用<code>node.getRuleContext().depth()</code>获得；注意在<code>visitTerminal</code>函数中需要强转一下类型。</li>
+<li>如何实现高亮：在<code>SysYParser</code>中找到对应的存放节点类型的数组，将数组中的值修改为对应的颜色值，每次根据<code>type</code>获取对应颜色。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Visitor</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">SysYParserBaseVisitor</span>&lt;Void&gt;&#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">hasError</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br><br>    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">getColor</span><span class="hljs-params">(<span class="hljs-type">int</span> type)</span> &#123;<br>        <span class="hljs-keyword">if</span> (type &lt; <span class="hljs-number">0</span> || type &gt;= _COLOR_NAMES.length) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">return</span> _COLOR_NAMES[type];<br>    &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] _COLOR_NAMES = &#123;<br>            <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[orange]&quot;</span>,<br>            <span class="hljs-string">&quot;[orange]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>,<br>            <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;[blue]&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span>,<br>            <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;[green]&quot;</span>,<br>            <span class="hljs-string">&quot;[red]&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;&quot;</span><br>    &#125;;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printIndents</span><span class="hljs-params">(<span class="hljs-type">int</span> depth)</span>&#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; depth * <span class="hljs-number">2</span>; i++)&#123;<br>            System.err.print(<span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Void <span class="hljs-title function_">visitChildren</span><span class="hljs-params">(RuleNode node)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">ruleIdx</span> <span class="hljs-operator">=</span> node.getRuleContext().getRuleIndex();<br>        <span class="hljs-type">String</span> <span class="hljs-variable">rule</span> <span class="hljs-operator">=</span> SysYParser.ruleNames[ruleIdx];<br>        <span class="hljs-keyword">if</span> (!hasError)&#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">depth</span> <span class="hljs-operator">=</span> node.getRuleContext().depth();<br>            printIndents(depth-<span class="hljs-number">1</span>); <span class="hljs-comment">// need -1: depth begin from 1</span><br>            System.err.println(rule.toUpperCase().charAt(<span class="hljs-number">0</span>) + rule.substring(<span class="hljs-number">1</span>));<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">super</span>.visitChildren(node);<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Void <span class="hljs-title function_">visitTerminal</span><span class="hljs-params">(TerminalNode node)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">type</span> <span class="hljs-operator">=</span> node.getSymbol().getType(); <span class="hljs-comment">// node type</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">color</span> <span class="hljs-operator">=</span> getColor(type);<br>        <span class="hljs-keyword">if</span> (!hasError &amp;&amp; !color.equals(<span class="hljs-string">&quot;&quot;</span>))&#123; <span class="hljs-comment">// &quot;&quot; means the terminal node we need, such as &#x27;&#123;&#x27; &#x27;&#125;&#x27;</span><br>            <span class="hljs-type">String</span> <span class="hljs-variable">literal_name</span> <span class="hljs-operator">=</span> node.toString();<br>            <span class="hljs-type">String</span> <span class="hljs-variable">symbol_name</span> <span class="hljs-operator">=</span> SysYParser.VOCABULARY.getSymbolicName(type);<br>            <span class="hljs-comment">// deal with numbers</span><br>            <span class="hljs-keyword">if</span> (type == SysYParser.INTEGR_CONST)&#123;<br>                literal_name = convert_to_dec(literal_name);<br>            &#125;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">depth</span> <span class="hljs-operator">=</span> ((RuleNode)node.getParent()).getRuleContext().depth(); <span class="hljs-comment">// the depth in parser tree</span><br>            printIndents(depth);<br>            System.err.println(literal_name + <span class="hljs-string">&quot; &quot;</span> + symbol_name + color);<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>    <br>    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">convert_to_dec</span><span class="hljs-params">(String number)</span>&#123;<br>        <span class="hljs-keyword">if</span> (number.equals(<span class="hljs-string">&quot;0&quot;</span>))&#123;<br>            number = <span class="hljs-string">&quot;0&quot;</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (number.startsWith(<span class="hljs-string">&quot;0x&quot;</span>) || number.startsWith(<span class="hljs-string">&quot;0X&quot;</span>))&#123;<br>            number = Integer.parseInt(number.substring(<span class="hljs-number">2</span>), <span class="hljs-number">16</span>) + <span class="hljs-string">&quot;&quot;</span>;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (number.startsWith(<span class="hljs-string">&quot;0&quot;</span>))&#123;<br>            number = Integer.parseInt(number.substring(<span class="hljs-number">1</span>), <span class="hljs-number">8</span>) + <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> number;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="碰到的问题">碰到的问题</h2>
+<h3 id="缩进">缩进</h3>
+<p>如何按层次缩进是做实验的时候碰到的最大的一个问题。一开始没想到会有<code>depth</code>字段，一直在想如何通过一个变量来标记层次，结果一直没有成功，因为两个<code>visit</code>函数都是进入节点之前调用，而没有对应的离开后调用的函数，所以不能通过在两个函数内的增减变化实现层次的变化（也许<code>Listener</code>应该是可以的）</p>
+<h3 id="拼写">拼写</h3>
+<p><code>INTEGR_CONST</code>。测试的时候看它输出在文件里报拼写错误，还以为是自己写错了，全部改成<code>INTEGER_CONST</code>，结果<code>OJ</code>过不了，后来发现在<code>Lab1</code>的<code>Lexer</code>中写的就是<code>INTEGR_CONST</code>。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" class="category-chain-item">编译原理</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">#编译原理</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>编译原理-Lab2</div>
+      <div>http://example.com/2022/11/24/compilation-principle/compilation-principle-lab2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>zhc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/13/compilation-principle/compilation-principle-lab3/" title="编译原理-Lab3">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">编译原理-Lab3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/21/nju-os-labs/OS-Lab3/" title="操作系统-Lab3">
+                        <span class="hidden-mobile">操作系统-Lab3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

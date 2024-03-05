@@ -1,0 +1,861 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 素数筛 非常普遍的，寻找素数可以使用\(O(N^{2})\)复杂度的算法来解决，但是不够高效。下面介绍几种更加高效的寻找素数的算法—素数筛。 最近再看到素数的算法，就想到了6.S081 lab1 中写的 primes 函数，好像其本质就是一个素数筛—埃式筛法 埃式筛法 思路就是，如果一个数是素数，我们可以将这个数的倍数全部划掉，因为它们不可能是素数。 代码如下，当我们找到一个素数时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="刷题笔记10—其他经典算法">
+<meta property="og:url" content="http://example.com/2022/11/15/leetcode/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B010%EF%BC%88%E5%85%B6%E4%BB%96%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%EF%BC%89/index.html">
+<meta property="og:site_name" content="ICDE">
+<meta property="og:description" content="1 素数筛 非常普遍的，寻找素数可以使用\(O(N^{2})\)复杂度的算法来解决，但是不够高效。下面介绍几种更加高效的寻找素数的算法—素数筛。 最近再看到素数的算法，就想到了6.S081 lab1 中写的 primes 函数，好像其本质就是一个素数筛—埃式筛法 埃式筛法 思路就是，如果一个数是素数，我们可以将这个数的倍数全部划掉，因为它们不可能是素数。 代码如下，当我们找到一个素数时">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-04T17:11:37.576Z">
+<meta property="article:author" content="zhc">
+<meta property="article:tag" content="leetcode">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>刷题笔记10—其他经典算法 - ICDE</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/csdn_iconfont/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="ICDE" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ICDE的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="刷题笔记10—其他经典算法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-15 00:00" pubdate>
+          2022年11月15日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          44 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">刷题笔记10—其他经典算法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="素数筛">1 素数筛</h2>
+<p>非常普遍的，寻找素数可以使用<span
+class="math inline">\(O(N^{2})\)</span>复杂度的算法来解决，但是不够高效。下面介绍几种更加高效的寻找素数的算法—素数筛。</p>
+<p>最近再看到素数的算法，就想到了6.S081 lab1 中写的 primes
+函数，好像其本质就是一个素数筛—埃式筛法</p>
+<h3 id="埃式筛法">埃式筛法</h3>
+<p>思路就是，如果一个数是素数，我们可以将这个数的倍数全部划掉，因为它们不可能是素数。</p>
+<p>代码如下，当我们找到一个素数时，我们就将这个素数的2倍、3倍、...划掉，而没有被划掉的就是素数。</p>
+<p>复杂度：<span class="math inline">\(O(N loglogN)\)</span></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">countPrimes</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">cnt</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-type">boolean</span>[] nums = <span class="hljs-keyword">new</span> <span class="hljs-title class_">boolean</span>[n];<br>    Arrays.fill(nums, <span class="hljs-literal">true</span>);<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>; i &lt; n; i++)&#123;<br>        <span class="hljs-keyword">if</span>(nums[i])&#123;<br>            cnt ++;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span> * i; j &lt; n; j += i)&#123;<br>                nums[j] = <span class="hljs-literal">false</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> cnt;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是，很明显这个解法存在一定的冗余，比如说 6 就被 素数2 和素数3
+重复标记，下面介绍复杂度为<span
+class="math inline">\(O(N)\)</span>的线性素数筛</p>
+<h3 id="线性筛">线性筛</h3>
+<p>线性筛实现了每个合数只被标记一次，时间复杂度为 <span
+class="math inline">\(O(N)\)</span></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">countPrimes</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> &#123;<br>    List&lt;Integer&gt; primes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>    <span class="hljs-type">boolean</span>[] nums = <span class="hljs-keyword">new</span> <span class="hljs-title class_">boolean</span>[n];<br>    Arrays.fill(nums, <span class="hljs-literal">true</span>);<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>; i &lt; n; i++)&#123;<br>        <span class="hljs-keyword">if</span>(nums[i])&#123;<br>            primes.add(i);<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; primes.size() &amp;&amp; primes.get(j) * i &lt; n; j++)&#123;<br>            nums[primes.get(j) * i] = <span class="hljs-literal">false</span>;<br>            <span class="hljs-keyword">if</span>(i % primes.get(j) == <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> primes.size();<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="阶乘">2 阶乘</h2>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/factorial-trailing-zeroes/">172.
+阶乘后的零</a></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221116121050876.png" srcset="/img/loading.gif" lazyload /></p>
+</blockquote>
+<p>这道题很明显直接去算阶乘肯定是行不通的，应该要考虑核心因素。</p>
+<p>产生0的原因是阶乘式子中存在<span class="math inline">\(2 \times
+5\)</span>，所以要计算0的数量，只要计算式子中出现了多少对<span
+class="math inline">\(2 \times 5\)</span>，即有多少因子2和因子5。</p>
+<p>再往下考虑，其实只需要考虑因子5的个数即可，因为因子2在任何偶数中都可以提取出来，所以在一个阶乘式子中，因子2的个数是大于因子5的（可以严格证明）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">trailingZeroes</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">cnt</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> n; i / <span class="hljs-number">5</span> &gt; <span class="hljs-number">0</span>; i /= <span class="hljs-number">5</span>)&#123;<br>        cnt += (i / <span class="hljs-number">5</span>);<br>    &#125;<br>    <span class="hljs-keyword">return</span> cnt;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/preimage-size-of-factorial-zeroes-function/">793.
+阶乘函数后 K 个零</a></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221116121859204.png" srcset="/img/loading.gif" lazyload /></p>
+</blockquote>
+<p>这一题相当于上一题的逆过程。</p>
+<p>首先明确，<span
+class="math inline">\(f(x)\)</span>肯定是一个单调递增的函数，<span
+class="math inline">\(x\)</span>越大，<span
+class="math inline">\(f(x)\)</span>的值肯定不会减少。而现在是给定<span
+class="math inline">\(f(x)\)</span>，要求出<span
+class="math inline">\(x\)</span>，很自然应该使用【<strong>二分查找</strong>】。</p>
+<p>1、注意数据范围：<span class="math inline">\(k &lt;= 10^9\)</span>，
+所以能够产生这个<span class="math inline">\(f(x)\)</span>的<span
+class="math inline">\(x\)</span>肯定已经超出了<code>int</code>的范围需要使用<code>long</code></p>
+<p>2、仔细想一想可以发现：给定<code>k</code>之后，要么不存在这样的<span
+class="math inline">\(x!\)</span>，如果存在只有5个这样的<span
+class="math inline">\(x!\)</span>。</p>
+<p>回到上一题的思路，阶乘末尾0的个数 =
+阶乘式子中因子5的个数。<strong>如果存在的话，应该是能够找到一个<span
+class="math inline">\(x\)</span>，是5的倍数，满足<span
+class="math inline">\(\le x\)</span>的数中因子5的数量之和<span
+class="math inline">\(=k\)</span>。</strong>【举个例子，<span
+class="math inline">\(k=4\)</span>，存在<span class="math inline">\(x =
+20\)</span>，满足<span class="math inline">\(\le
+x\)</span>的数中因子5的数量之和<span
+class="math inline">\(=4\)</span>（<span
+class="math inline">\(5、10、15、20\)</span>）】既然如此，那么答案应该就在找到的这个<span
+class="math inline">\(x\)</span>到下一个5的倍数<span
+class="math inline">\(x+5\)</span>之间，即<span
+class="math inline">\([x, x+5)\)</span>，因为到下一个5的倍数<span
+class="math inline">\(x+5\)</span>时，<span
+class="math inline">\(f(x)\)</span>肯定大于<span
+class="math inline">\(k\)</span>，所以总共只有5个。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">preimageSizeFZF</span><span class="hljs-params">(<span class="hljs-type">int</span> k)</span> &#123;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">lo</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; <span class="hljs-type">long</span> <span class="hljs-variable">hi</span> <span class="hljs-operator">=</span> Long.MAX_VALUE;<br>    <span class="hljs-keyword">while</span>(lo &lt;= hi)&#123;<br>        <span class="hljs-type">long</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> lo + (hi - lo) / <span class="hljs-number">2</span>;<br>        <span class="hljs-type">long</span> <span class="hljs-variable">k0</span> <span class="hljs-operator">=</span> trailingZeroes(mid);<br>        <span class="hljs-keyword">if</span>(k0 == k) <span class="hljs-keyword">return</span> <span class="hljs-number">5</span>;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(k0 &gt; k) hi = mid - <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">else</span> lo = mid + <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><br><span class="hljs-keyword">public</span> <span class="hljs-type">long</span> <span class="hljs-title function_">trailingZeroes</span><span class="hljs-params">(<span class="hljs-type">long</span> n)</span> &#123;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">cnt</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">long</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> n; i / <span class="hljs-number">5</span> &gt; <span class="hljs-number">0</span>; i /= <span class="hljs-number">5</span>)&#123;<br>        cnt += (i / <span class="hljs-number">5</span>);<br>    &#125;<br>    <span class="hljs-keyword">return</span> cnt;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="水塘抽样">3 水塘抽样</h2>
+<p><strong>这个算法可以实现【低空间复杂度】从无限序列中随机抽取元素。</strong>实际上是用时间换空间的一种算法。</p>
+<h4 id="问题1无重复元素">问题1：无重复元素</h4>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/linked-list-random-node/">382.
+链表随机节点</a></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221117093723012.png" srcset="/img/loading.gif" lazyload /></p>
+</blockquote>
+<p>思路：当遇到第<code>i</code>个元素时，从<span
+class="math inline">\([0,
+i)\)</span>之间随机抽取一个数，如果这个数为0，则将答案置为第<code>i</code>个元素，否则答案不变。这样可以使得返回每个元素的概率都为<span
+class="math inline">\(\frac{1}{n}\)</span>。</p>
+<p>证明： <span class="math display">\[
+P(return \ \  i\text{-}th \ \ element) = \\
+P(第i次随机选择的值=0) \times P(第i+1次随机选择的值\ne0) \times \cdots
+\times P(第n次随机选择的值\ne0) =\\
+\frac{1}{i} \times (1 - \frac{1}{i+1}) \times (1 - \frac{1}{i+2}) \times
+\cdots \times (1 - \frac{1}{n}) = \frac{1}{n}
+\]</span> 代码：<code>getRandom</code>函数的时间复杂度为<span
+class="math inline">\(O(N)\)</span>，空间复杂度为<span
+class="math inline">\(O(1)\)</span></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><br>    ListNode head;<br>    Random r;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Solution</span><span class="hljs-params">(ListNode head)</span> &#123;<br>        <span class="hljs-built_in">this</span>.head = head;<br>        r = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();<br>    &#125;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getRandom</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">ListNode</span> <span class="hljs-variable">h0</span> <span class="hljs-operator">=</span> head;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">res</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(h0 != <span class="hljs-literal">null</span>)&#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">val</span> <span class="hljs-operator">=</span> h0.val;<br>            i++;<br>            <span class="hljs-keyword">if</span>(r.nextInt(i) == <span class="hljs-number">0</span>)&#123;<br>                res = val;<br>            &#125;<br>            h0 = h0.next;<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="问题2存在重复元素">问题2：存在重复元素</h4>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/random-pick-index/">398.
+随机数索引</a></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221117095257824.png" srcset="/img/loading.gif" lazyload /></p>
+</blockquote>
+<p>思路：当遇到第<code>i</code>个<code>target</code>时，随机选取<span
+class="math inline">\([0,
+i)\)</span>之间的一个整数，如果其为0，这将答案置为<code>target</code>下标，否则答案不变。如果存在<code>k</code>个<code>target</code>，保证返回每个索引的概率都为<span
+class="math inline">\(\frac{1}{k}\)</span>。</p>
+<p>证明同上。</p>
+<p>代码：<code>pick</code>函数的时间复杂度为<span
+class="math inline">\(O(N)\)</span>，空间复杂度为<span
+class="math inline">\(O(1)\)</span></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><br>    <span class="hljs-type">int</span>[] nums;<br>    Random r;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Solution</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums)</span> &#123;<br>        <span class="hljs-built_in">this</span>.nums = nums;<br>        r = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();<br>    &#125;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">pick</span><span class="hljs-params">(<span class="hljs-type">int</span> target)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">times</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">res</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; nums.length; i++)&#123;<br>            <span class="hljs-keyword">if</span>(nums[i] == target)&#123;<br>                times ++;<br>                <span class="hljs-keyword">if</span>(r.nextInt(times) == <span class="hljs-number">0</span>)&#123;<br>                    res = i;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="吃葡萄">4 吃葡萄</h2>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.nowcoder.com/questionTerminal/14c0359fb77a48319f0122ec175c9ada">吃葡萄</a></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221118092640002.png" srcset="/img/loading.gif" lazyload /></p>
+</blockquote>
+<p>【要求】<u>三个人中吃的最多的那个人吃得尽量少</u>，<strong>就需要尽可能的平均分</strong>。当不考虑每个人只能吃两种葡萄的限制，答案应该是<span
+class="math inline">\((a+b+c+2)/3\)</span>，就是总和除3向上取整。</p>
+<p>但是有"每个人只能吃两种葡萄"的限制就不能这么简单考虑，因为如果出现"其中两种葡萄很少，第三种很多"的情况时，就不一样了。比如<span
+class="math inline">\(a =1,\ b=1,\
+c=10000\)</span>，这个时候很明显答案就不是<span
+class="math inline">\((a+b+c+2)/3\)</span>了，因为只能吃<span
+class="math inline">\(a,b\)</span>两种葡萄的人最多只能吃2颗，这种情况下做不到三个人平均分，<strong>只能两个人平均分</strong>，来实现吃的最多的人吃得尽量少，就是<span
+class="math inline">\((c+1)/2\)</span>，即<span
+class="math inline">\((max+1)/2\)</span></p>
+<p>那么如何判断属于哪种情况呢？当<span
+class="math inline">\(a,b,c\)</span>三者没有相差很大的情况下，很明显<span
+class="math inline">\((a+b+c+2)/3 &gt;
+(max+1)/2\)</span>；而当其中一种水果远大于另外两种时，<span
+class="math inline">\((a+b+c+2)/3 &lt;
+(max+1)/2\)</span>。所以答案应该是<span class="math inline">\(max( \
+(a+b+c+2)/3,\ (\ max(a,b,c) + 1 \ )/2 )\)</span></p>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;math.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> n = <span class="hljs-number">0</span>;<br>    cin &gt;&gt; n;<br>    <span class="hljs-keyword">while</span>(n -- &gt; <span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-type">int</span> a, b, c;<br>        cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;<br>        <span class="hljs-type">int</span> max_val = <span class="hljs-built_in">max</span>( <span class="hljs-built_in">max</span>(a, b), c );<br>        <span class="hljs-type">int</span> sum = a + b + c;<br>        cout &lt;&lt; <span class="hljs-built_in">max</span>( (sum+<span class="hljs-number">2</span>)/<span class="hljs-number">3</span>, (max_val+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span> ) &lt;&lt; endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="同时寻找缺失和重复的元素">5 同时寻找缺失和重复的元素</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/set-mismatch/">645.
+错误的集合</a></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221118111228487.png" srcset="/img/loading.gif" lazyload /></p>
+<p><strong>注意数组是无序的</strong></p>
+</blockquote>
+<p>首先很常规的方法有【排序】、【哈希】，这些都需要一定空间复杂度。下面谈谈常数空间复杂度的【映射】和【异或】</p>
+<h3 id="映射">映射</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span>[] findErrorNums(<span class="hljs-type">int</span>[] nums) &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> nums.length;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">dup</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; n; i++)&#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">idx</span> <span class="hljs-operator">=</span> Math.abs(nums[i]) - <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">if</span>(nums[idx] &lt; <span class="hljs-number">0</span>)&#123; <span class="hljs-comment">// 重复元素</span><br>            dup = Math.abs(nums[i]);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            nums[idx] *= -<span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-type">int</span> <span class="hljs-variable">mis</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; n; i++)&#123;<br>        <span class="hljs-keyword">if</span>(nums[i] &gt; <span class="hljs-number">0</span>)&#123;<br>            mis = i + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]&#123;dup, mis&#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="异或">异或</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span>[] findErrorNums(<span class="hljs-type">int</span>[] nums) &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> nums.length;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">xor</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> num : nums) xor ^= num;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt;= n; i++) xor ^= i;<br>    <span class="hljs-comment">// xor = dup ^ mis</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">lowbit</span> <span class="hljs-operator">=</span> xor &amp; (-xor);<br><br>    <span class="hljs-type">int</span> <span class="hljs-variable">num1</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; <span class="hljs-type">int</span> <span class="hljs-variable">num2</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> num : nums)&#123;<br>        <span class="hljs-keyword">if</span>((lowbit &amp; num) == <span class="hljs-number">0</span>)&#123;<br>            num1 ^= num;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            num2 ^= num;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt;= n; i++)&#123;<br>        <span class="hljs-keyword">if</span>((lowbit &amp; i) == <span class="hljs-number">0</span>)&#123;<br>            num1 ^= i;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            num2 ^= i;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> num : nums)&#123;<br>        <span class="hljs-keyword">if</span>(num == num1)&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]&#123;num1, num2&#125;;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(num == num2)&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]&#123;num2, num1&#125;;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="category-chain-item">leetcode刷题笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/leetcode/">#leetcode</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>刷题笔记10—其他经典算法</div>
+      <div>http://example.com/2022/11/15/leetcode/刷题笔记10（其他经典算法）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>zhc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/16/leetcode/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B09%EF%BC%88dp%E5%BA%94%E7%94%A8%EF%BC%89/" title="刷题笔记9-dp应用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">刷题笔记9-dp应用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/12/front-end-technology/TypeScript/" title="TypeScript">
+                        <span class="hidden-mobile">TypeScript</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

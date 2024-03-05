@@ -1,0 +1,925 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="2.1 处理器 2.1.1 处理器与寄存器  用户程序可见寄存器：减少访问主存储器 控制与状态寄存器 程序状态字  2.1.2 指令与处理器模式  机器指令：计算机系统执行的基本命令，中央处理器执行的基本单位 指令执行过程：取指——解码——执行 特权指令和非特权指令 模式切换  2.2 中断管理 2.2.1 中断与中断源  &#x3D;&#x3D;中断&#x3D;&#x3D;：程序执行过程中，遇到急需处">
+<meta property="og:type" content="article">
+<meta property="og:title" content="处理器管理">
+<meta property="og:url" content="http://example.com/2023/02/15/nju-course-review-notes/os/processor-management/index.html">
+<meta property="og:site_name" content="ICDE">
+<meta property="og:description" content="2.1 处理器 2.1.1 处理器与寄存器  用户程序可见寄存器：减少访问主存储器 控制与状态寄存器 程序状态字  2.1.2 指令与处理器模式  机器指令：计算机系统执行的基本命令，中央处理器执行的基本单位 指令执行过程：取指——解码——执行 特权指令和非特权指令 模式切换  2.2 中断管理 2.2.1 中断与中断源  &#x3D;&#x3D;中断&#x3D;&#x3D;：程序执行过程中，遇到急需处">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-04T17:11:38.960Z">
+<meta property="article:author" content="zhc">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>处理器管理 - ICDE</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/csdn_iconfont/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="ICDE" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ICDE的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="处理器管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-15 00:00" pubdate>
+          2023年2月15日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">处理器管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="处理器">2.1 处理器</h2>
+<h3 id="处理器与寄存器">2.1.1 处理器与寄存器</h3>
+<ul>
+<li><strong>用户程序可见寄存器</strong>：减少访问主存储器</li>
+<li><strong>控制与状态寄存器</strong></li>
+<li><strong>程序状态字</strong></li>
+</ul>
+<h3 id="指令与处理器模式">2.1.2 指令与处理器模式</h3>
+<ul>
+<li><strong>机器指令</strong>：计算机系统执行的基本命令，中央处理器执行的基本单位</li>
+<li>指令执行过程：取指——解码——执行</li>
+<li>特权指令和非特权指令</li>
+<li>模式切换</li>
+</ul>
+<h2 id="中断管理">2.2 中断管理</h2>
+<h3 id="中断与中断源">2.2.1 中断与中断源</h3>
+<ul>
+<li><strong>==中断==</strong>：程序执行过程中，遇到急需处理的事件时，暂时中止CPU上现行的程序，转去执行相应的事件处理程序，待处理完成后再返回原程序被中断处或者调度其他程序执行的过程</li>
+<li>操作系统是中断驱动的，中断是激活操作系统的唯一方式</li>
+<li>狭义的中断：来源于处理器之外的中断事件，与当前执行指令无关的中断事件</li>
+<li>异常：<u>当前运行指令</u>引起的中断事件=》非正常</li>
+<li>系统异常：执行陷入指令出发系统调用：请求设备、请求I/O、创建进程等</li>
+<li><strong>中断源</strong>：
+<ul>
+<li>硬件故障</li>
+<li>程序性中断——异常</li>
+<li>自愿性中断——系统调用、陷入指令</li>
+<li>I/O中断事件——IO处理</li>
+<li>外部中断事件——设备引起的中断（时钟、键盘）</li>
+</ul></li>
+</ul>
+<h3 id="中断系统">2.2.2 中断系统</h3>
+<ul>
+<li><p><strong>中断系统</strong>是计算机系统响应并处理中断的系统</p>
+<ul>
+<li>硬件子系统=》中断响应</li>
+<li>软件子系统=》中断处理</li>
+</ul></li>
+<li><p>中断响应处理 =》在每个指令周期的最后进行</p></li>
+<li><p>中断装置：计算机系统发现并相应中断的硬件装置</p>
+<ul>
+<li>处理器以外的中断：中断控制器发现并响应</li>
+<li>处理器以内的异常：指令的控制逻辑和实现线路发现并响应</li>
+<li>请求OS服务的<u>系统异常</u></li>
+</ul></li>
+<li><p>中断控制器：控制部件，中断控制逻辑线路+中断寄存器</p>
+<ul>
+<li>外部设备发出IRQ=》在中断寄存器中设置已发生的中断</li>
+<li>在指令处理结束前，检查中断的产生</li>
+</ul></li>
+<li><p>中断响应过程</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215113158382.png" srcset="/img/loading.gif" lazyload /></p></li>
+</ul>
+<h3 id="多中断的响应与处理">2.2.3 多中断的响应与处理</h3>
+<ul>
+<li>中断屏蔽可以使中断装置不响应某些中断</li>
+<li>中断优先级决定了中断装置响应中断的次序</li>
+<li>中断嵌套有层数限制</li>
+<li>中断的嵌套处理改变了中断处理的次序（先响应后处理）</li>
+</ul>
+<h2 id="进程管理">2.3 进程管理</h2>
+<h3 id="进程及其状态">2.3.1 进程及其状态</h3>
+<ul>
+<li><p><strong>进程</strong>：一个具有一定独立功能的程序关于某个数据集合的一次运行活动</p></li>
+<li><p>进程是操作系统进行资源分配和调度的一个独立单位</p></li>
+<li><p>一个进程包括五个实体部分：P（管理运行程序的数据结构）、C（内存代码）、D（内存数据）、R（通用寄存器信息）、PSW（程序状态字信息）</p></li>
+<li><p>代码、数据、运行时间的不同都意味着不同的进程</p></li>
+<li><p><strong>状态</strong></p>
+<ul>
+<li><strong>运行态</strong>：进程占有处理器</li>
+<li><strong>就绪态</strong>：进程具备运行条件等待被处理器选中运行</li>
+<li><strong>等待态</strong>：等待资源、输入输出、信号等而不具备运行条件</li>
+</ul>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215090607700.png" srcset="/img/loading.gif" lazyload /></p></li>
+<li><p><strong>挂起态</strong>：某些进程被剥夺了内存及其他资源，调入OS管理的对换区，不参加进程调度，等待适当时候再调入内存、恢复资源、参与运行
+=》 进程挂起（不占据任何资源）</p></li>
+</ul>
+<h3 id="进程的数据描述">2.3.2 进程的数据描述</h3>
+<ul>
+<li><strong>进程控制块</strong>：<code>PCB</code>，OS用于记录和刻画进程状态及环境信息的数据结构，借以全面管理进程的物理实体，刻画进程的执行现状，控制进程的执行
+<ul>
+<li>标识信息：唯一标识进程</li>
+<li>现场信息：用户可见寄存器、控制与状态寄存器、栈指针内容</li>
+<li>控制信息</li>
+</ul></li>
+<li><strong>进程映像</strong>：某一时刻进程的内容及其执行状态集合。进程映像是内存级的物理实体，又称为进程的内存映像
+<ul>
+<li>进程控制块</li>
+<li>进程程序块</li>
+<li>进程数据块</li>
+<li>核心栈（内核模式）</li>
+</ul></li>
+<li><strong>进程上下文</strong>：进程物理实体+支持进程运行的环境=》进程上下文
+<ul>
+<li>用户级上下文</li>
+<li>寄存器上下文</li>
+<li>系统级上下文</li>
+</ul></li>
+</ul>
+<h3 id="进程管理的实现">2.3.3 进程管理的实现</h3>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215105222086.png" srcset="/img/loading.gif" lazyload /></p>
+<ul>
+<li><p>建立多个进程队列=》就绪队列和等待队列=》先进先出队列和优先队列</p></li>
+<li><p>进程的控制和管理</p></li>
+<li><p>进程控制过程中涉及对OS核心数据结构的修改需要使用原语</p></li>
+<li><p>进程切换</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215111124677.png" srcset="/img/loading.gif" lazyload /></p></li>
+<li></li>
+</ul>
+<h3 id="多线程技术">2.4 多线程技术</h3>
+<h3 id="多线程环境概述">2.4.1 多线程环境概述</h3>
+<ul>
+<li>单线程结构进程的问题：
+<ul>
+<li>进程切换开销大</li>
+<li>进程通信开销大</li>
+<li>限制了并发进程的粒度</li>
+<li>降低了并行计算的效率</li>
+</ul></li>
+<li>多线程环境下，<u>进程是OS进行保护和资源分配的基本单位</u>；<u>线程是调度的基本单位</u>，同一个进程中的所有线程共享进程获得的主存空间和资源。</li>
+<li>多线程优点：线程切换快速；减少管理开销；通信易于实现；并行程度提高；节省内存空间</li>
+<li>多线程应用：前后台工作、C/S应用模式、加快执行速度、设计用户接口</li>
+</ul>
+<h3 id="多线程的实现技术">2.4.2 多线程的实现技术</h3>
+<ul>
+<li><p><strong>内核级多线程（KLT）</strong>：线程管理的所有工作由OS内核来做</p>
+<ul>
+<li>线程切换需要内核参与=》模式切换=》系统开销大</li>
+<li>物理并行性问题</li>
+</ul></li>
+<li><p><strong>用户级多线程（ULT）</strong>：线程管理的所有工作都由应用程序完成，内核没有意识到线程的存在</p>
+<ul>
+<li>线程切换不需要内核参与；但是不能利用多处理器的优点，线程的阻塞会引起整个进程的阻塞</li>
+<li>逻辑并行性问题</li>
+</ul></li>
+<li><p><strong>Jacketing技术</strong></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215101225878.png" srcset="/img/loading.gif" lazyload /></p>
+<ul>
+<li>解决ULT中一个线程的阻塞引起整个进程阻塞的问题</li>
+<li>线程不是直接进行系统调用，而是调用jacketing程序，由jacketing程序来检查线程所需资源是否空闲，如果不空闲的话就进行线程切换（如果不使用jacketing技术，该线程就会陷入系统调用然后被阻塞），当该线程再次被赋予时间片的时候，jacket程序会再次检查资源是否空闲
+<ul>
+<li>阻塞式系统调用=》非阻塞式</li>
+</ul></li>
+</ul></li>
+<li><p><strong>混合式策略</strong>：组合用户级线程和内核级线程</p>
+<ul>
+<li><p>一个应用中的ULT会被映射到一个或多个KLT上</p></li>
+<li><p>线程的创建、调度和同步完全是在用户空间完成的</p></li>
+<li><p>调度图</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215101829462.png" srcset="/img/loading.gif" lazyload /></p></li>
+</ul></li>
+</ul>
+<table>
+
+<thead>
+<tr class="header">
+<th>内核级线程</th>
+<th>用户级线程</th>
+<th>混合式线程</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215100240015.png" srcset="/img/loading.gif" lazyload /></td>
+<td><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215100254822.png" srcset="/img/loading.gif" lazyload /></td>
+<td><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215100312478.png" srcset="/img/loading.gif" lazyload /></td>
+</tr>
+</tbody>
+</table>
+<h2 id="处理器调度">2.5 处理器调度</h2>
+<h3 id="处理器调度层次">2.5.1 处理器调度层次</h3>
+<ul>
+<li><strong>高级调度（长程/作业调度）</strong>：决定能否加入到执行的进程池中
+<ul>
+<li>新建态=》就绪态/就绪挂起态</li>
+<li>是否新建？是否加入进程池中？运行前的准备</li>
+</ul></li>
+<li><strong>中级调度（平衡负载调度）</strong>：决定主存中可用的进程集合（挂起相关）
+<ul>
+<li>为了提高内存利用率和作业吞吐量</li>
+<li>决定哪些进程留在主存中参与处理器竞争，哪些进程换出主存</li>
+</ul></li>
+<li><strong>低级调度（短程/进程调度）</strong>：决定哪个可用进程可以占用处理器执行（核心三态模型之间的调度）</li>
+</ul>
+<h3 id="处理器调度算法">2.5.2 处理器调度算法</h3>
+<ul>
+<li><strong>优先数调度算法</strong>：根据分配给进程的优先数
+<ul>
+<li>抢占式/非抢占式</li>
+<li>优先数确定准则：任务紧迫程度、交互性、使用外设频率、进入系统时间长短</li>
+<li>计算时间短、剩余计算时间短、响应比（等待时间/进入时间）高优先、先来先服务</li>
+</ul></li>
+<li><strong>时间片轮转调度算法</strong>：根据进入就绪队列的时间先后轮流占有CPU一个时间片</li>
+<li><strong>分级调度算法</strong>：多级队列策略
+<ul>
+<li><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230215103848868.png" srcset="/img/loading.gif" lazyload /></li>
+</ul></li>
+<li><strong>彩票调度算法</strong>：随机？根据优先级发放彩票数量（优先级高彩票数量多）调度=》随机抽彩票</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/nju-course-review/" class="category-chain-item">nju-course-review</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/">#OS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>处理器管理</div>
+      <div>http://example.com/2023/02/15/nju-course-review-notes/os/processor-management/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>zhc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/15/nju-course-review-notes/%E9%9C%80%E6%B1%82%E4%B8%8E%E5%95%86%E4%B8%9A%E6%A8%A1%E5%BC%8F%E5%A4%8D%E4%B9%A0%E6%8F%90%E7%BA%B2/" title="需求与商业模式创新">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">需求与商业模式创新</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/13/nju-course-review-notes/os/file-management/" title="文件管理">
+                        <span class="hidden-mobile">文件管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1032 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="5.1 文件系统概述 5.1.1 文件的概念 文件概念 文件是具有符号名的，在逻辑上具有完整意义的一组相关信息项的序列  文件的命名：. 文件名用于设别文件，扩展名用于识别文件特性  引入文件的优点  用户使用方便：实现了&#x3D;&#x3D;按名存取&#x3D;&#x3D;，知道文件名就可存取信息。 文件安全可靠：通过文件系统实现对文件的访问 文件可备份：文件可以组织转储或备份 文件可共享：文件可共享，提高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件管理">
+<meta property="og:url" content="http://example.com/2023/02/13/nju-course-review-notes/os/file-management/index.html">
+<meta property="og:site_name" content="ICDE">
+<meta property="og:description" content="5.1 文件系统概述 5.1.1 文件的概念 文件概念 文件是具有符号名的，在逻辑上具有完整意义的一组相关信息项的序列  文件的命名：. 文件名用于设别文件，扩展名用于识别文件特性  引入文件的优点  用户使用方便：实现了&#x3D;&#x3D;按名存取&#x3D;&#x3D;，知道文件名就可存取信息。 文件安全可靠：通过文件系统实现对文件的访问 文件可备份：文件可以组织转储或备份 文件可共享：文件可共享，提高">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-04T17:11:38.954Z">
+<meta property="article:author" content="zhc">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>文件管理 - ICDE</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/csdn_iconfont/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="ICDE" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ICDE的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="文件管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-13 00:00" pubdate>
+          2023年2月13日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">文件管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="文件系统概述">5.1 文件系统概述</h2>
+<h3 id="文件的概念">5.1.1 文件的概念</h3>
+<h4 id="文件概念">文件概念</h4>
+<p><strong>文件是具有符号名的，在逻辑上具有完整意义的一组相关信息项的序列</strong></p>
+<blockquote>
+<p>文件的命名：<文件名><code>.</code><扩展名></p>
+<p>文件名用于设别文件，扩展名用于识别文件特性</p>
+</blockquote>
+<h4 id="引入文件的优点">引入文件的优点</h4>
+<ol type="1">
+<li>用户使用方便：实现了==按名存取==，知道文件名就可存取信息。</li>
+<li>文件安全可靠：通过文件系统实现对文件的访问</li>
+<li>文件可备份：文件可以组织转储或备份</li>
+<li>文件可共享：文件可共享，提高利用率</li>
+</ol>
+<h3 id="文件系统及其功能">5.1.2 文件系统及其功能</h3>
+<h4 id="文件系统">文件系统</h4>
+<p>文件系统是操作系统中负责存取和管理信息的模块，它用统一的方式管理用户和系统信息的存储、检索、更新、共享和保护，并为用户提供一整套方便有效的文件使用和操作方法</p>
+<p>功能：</p>
+<ul>
+<li>文件的按名存取</li>
+<li>文件的共享和保护</li>
+<li>文件的操作和使用</li>
+</ul>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221124234708050.png" srcset="/img/loading.gif" lazyload /></p>
+<h2 id="文件的组织">5.2 文件的组织</h2>
+<h3 id="文件的存储">5.2.1 文件的存储</h3>
+<h4 id="卷和块">卷和块</h4>
+<ul>
+<li>文件存储介质：磁带、光盘和磁盘</li>
+<li>==卷==：存储介质的物理单位，对应于一盘磁盘、一块软盘、一个光盘片、一个硬盘分区</li>
+<li>==块==：存储介质上连续信息所组成的一个区域，也叫物理记录
+<ul>
+<li><strong>是主存储器和辅助存储器进行数据交换的<u>物理单位</u>，每次交换一块或整数块信息</strong></li>
+<li>存储文件的设备一般都是块设备</li>
+</ul></li>
+<li>块的大小和<u>用户使用方式</u>、<u>数据传输效率</u>和<u>存储设备类型</u>相关
+<ul>
+<li>外围设备中相邻块之间必须留有间隙：<u>启停机械动作</u>和<u>识别不同块</u>的要求=》需要时间
+<ul>
+<li>磁盘</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 id="存取存储方式">存取存储方式</h4>
+<h5 id="顺序存取存储设备">顺序存取存储设备</h5>
+<ul>
+<li>磁带机（同心圆）、光盘（螺旋线）都是一种顺序存取存储设备</li>
+<li><u>严格依赖信息的物理位置次序进行定位和读写</u>的存储设备</li>
+<li>磁带机
+<ul>
+<li>存储容量大、稳定可靠、卷可装卸和便于保存，广泛用作存档</li>
+<li>磁带的块长的变化范围可以较大，没有限制</li>
+</ul></li>
+</ul>
+<h5 id="直接存取存储设备">直接存取存储设备</h5>
+<ul>
+<li>==磁盘==是一种直接（随机）存取存储设备</li>
+<li><u>移臂+旋转</u>
+来定位，存储速度高，存取任意一个物理块所需时间几乎不依赖于信息的位置</li>
+</ul>
+<h3 id="文件的逻辑结构">5.2.2 文件的逻辑结构</h3>
+<h4 id="逻辑文件">逻辑文件</h4>
+<p>==逻辑文件==：又称文件的逻辑结构</p>
+<ul>
+<li>独立于物理环境的，用户概念中的抽象信息组织方式</li>
+<li>用户能观察到的，并加以处理的数据集合</li>
+</ul>
+<p>分为两种形式：1、流式文件；2、记录式文件</p>
+<h4 id="流式文件">流式文件</h4>
+<p>文件内的数据不再组成记录，只是由一串依次的字节组成的信息流序列，常常按长度来读取所需信息。</p>
+<h4 id="记录式文件">记录式文件</h4>
+<ul>
+<li>记录式文件：有结构的文件，若干逻辑记录信息所组成的记录流文件</li>
+<li>逻辑记录是文件中按信息在逻辑上的独立含义所划分的信息单位</li>
+<li>例如：每个职工的工资信息构成一个逻辑信息，所有职工的工资信息便组成了记录式文件。</li>
+</ul>
+<blockquote>
+<p>和数据库之间的区别：</p>
+<ol type="1">
+<li>数据库中的记录之间可以通过数据冗余<strong>构成某种联系</strong></li>
+<li>数据库管理系统支持基于联系的<strong>数据查询</strong></li>
+<li>数据库支持<strong>事务管理</strong></li>
+</ol>
+</blockquote>
+<h3 id="记录组成与分解">5.2.3 记录组成与分解</h3>
+<blockquote>
+<p>上课没讲</p>
+</blockquote>
+<h3 id="文件的物理结构">5.2.4 文件的物理结构</h3>
+<ul>
+<li>文件的物理结构和组织是指文件在物理存储空间中的存放方法和组织关系</li>
+<li>文件的存储结构涉及块的划分、记录的排列、索引的组织、信息的搜索等许多问题，其优劣直接影响文件系统的性能</li>
+</ul>
+<h4 id="顺序文件">顺序文件</h4>
+<p>顺序（连续）文件：将一个文件中逻辑上连续的信息存放到存储介质的依次相邻的块中的文件</p>
+<p>例如：磁带文件、光盘文件</p>
+<ul>
+<li>优点：顺序存取记录时速度较快</li>
+<li>缺点：
+<ul>
+<li>建立文件前需要预先确定文件长度以分配存储空间</li>
+<li>修改、插入增加文件记录有困难</li>
+</ul></li>
+</ul>
+<h4 id="连接文件">连接文件</h4>
+<ul>
+<li>连接（串联）文件：使用连接字来表示文件中各个物理块之间的先后次序</li>
+<li>输入井和输出井都使用此类文件</li>
+</ul>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221125003450926.png" srcset="/img/loading.gif" lazyload
+alt="连接文件" />
+<figcaption aria-hidden="true">连接文件</figcaption>
+</figure>
+<p>优点：易于对文件记录做增、删、改，易于动态增长记录；不必预先确知文件长度；存储空间利用率高。</p>
+<p>缺点：存放指针需要额外的存储空间；需要通过缓冲区获得连接字后才能找到下一物理块地址，仅适用于顺序存取。</p>
+<h4 id="直接文件">直接文件</h4>
+<p>又称散列文件，通过计算记录的关键字建立与物理存储地址之间的对应关系（散列表，可能出现冲突）</p>
+<h4 id="索引文件">索引文件</h4>
+<p>索引文件为每个文件都建立了一张索引表，其中，每个表目包含一个记录的键（或逻辑记录号）及其存储地址。索引表的地址可由文件目录指出，查阅索引表先找到相应记录键（或逻辑记录号），然后获得数据存储地址。</p>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221125161841819.png" srcset="/img/loading.gif" lazyload
+alt="索引文件" />
+<figcaption aria-hidden="true">索引文件</figcaption>
+</figure>
+<p>访问方式：1、查找索引表；2、获得记录的物理地址</p>
+<p>优点：克服了连接文件只能顺序存取的缺点，具有直接读写任意一个记录的能力，便于文件的增、删、改。</p>
+<p>缺点：增加了索引表的空间开销和查找时间。</p>
+<p>==多级索引==</p>
+<p>优点：节省inode的存储空间（使得inode号容量尽可能大）；对小文件有较高的性能</p>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221125162119490.png" srcset="/img/loading.gif" lazyload
+alt="多级索引" />
+<figcaption aria-hidden="true">多级索引</figcaption>
+</figure>
+<blockquote>
+<p>第一列的13个地址为：10个直接地址的索引+1个一级间接索引+1个二级间接索引+1个三级间接索引</p>
+</blockquote>
+<h2 id="文件目录">5.3 文件目录</h2>
+<h3 id="文件目录结构">5.3.1 文件目录结构</h3>
+<h4 id="文件目录-1">文件目录</h4>
+<ul>
+<li>文件目录是实现文件按名存取的关键数据结构</li>
+<li>文件目录的建立维护和检索是文件系统的基本功能之一</li>
+<li>文件目录需要永久保存，组织成文件放在磁盘中，称为目录文件</li>
+</ul>
+<h4 id="一级目录结构">一级目录结构</h4>
+<p><u>构造一张线性表</u>，每个文件的相关属性占用一个目录项，构成一级目录结构</p>
+<p>容易重名，不利于记忆</p>
+<h4 id="二级目录结构">二级目录结构</h4>
+<p>第一级为主文件目录，管理所有用户文件目录，目录项登记了系统接受的<u>用户的名字</u>及<u>该用户文件目录的地址</u>。</p>
+<p>第二级为用户的文件目录，目录项登记一个文件的相关属性，每个用户只能查看自己的文件目录。</p>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221124154232094.png" srcset="/img/loading.gif" lazyload
+alt="二级目录结构" />
+<figcaption aria-hidden="true">二级目录结构</figcaption>
+</figure>
+<p>优点：通过主文件目录使得用户文件私密性得到保证，实现了对文件的保密和保护；不同用户可以具有同名文件，不会混乱。</p>
+<p>缺点：同一个用户还是存在文件多、易重名问题。</p>
+<h4 id="树形目录结构">树形目录结构</h4>
+<ul>
+<li>层次文件目录结构通常使用 树形目录结构</li>
+<li>可以较好地反映现实世界中具有<u>层次关系的数据集合</u>和<u>较确切地反映系统内部文件的组织结构</u></li>
+<li>易于规定不同层次或子树中文件的不同存取规格，便于文件的保护、保密和共享。</li>
+<li>只要不位于同一末端的子目录中，不同文件可以重名</li>
+</ul>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20221125163457307.png" srcset="/img/loading.gif" lazyload
+alt="树形目录结构" />
+<figcaption aria-hidden="true">树形目录结构</figcaption>
+</figure>
+<h2 id="文件的共享保护与保密">5.4 文件的共享、保护与保密</h2>
+<h3 id="文件的安全与保护">5.4.1 文件的安全与保护</h3>
+<ul>
+<li>文件共享：不同用户共同使用某些文件</li>
+<li>文件保护：防止文件被破坏</li>
+<li>文件保密：防止文件及其内容被其他用户窃取
+<ul>
+<li>隐蔽文件目录</li>
+<li>设置口令</li>
+<li>使用密码</li>
+</ul></li>
+</ul>
+<h3 id="文件的保护">5.4.2 文件的保护</h3>
+<ul>
+<li>文件副本：防止软硬件故障、保存信息完整性的能力
+<ul>
+<li>动态多副本技术：在多个介质上维护同一内容的文件，并保持同步更新</li>
+<li>转储、备份与恢复：定时把文件复制转储到其他介质上，当某介质出现故障时，复原转储文件
+<ul>
+<li>一定时间间隔或一个单位处理结束后，系统自动复写更新过的文件和数据</li>
+<li>二是每天或每周把文件信息全部复写一遍</li>
+</ul></li>
+</ul></li>
+<li>文件存取矩阵与文件存取表：系统为每个用户设置访问每个文件对象的存取属性组成的二维矩阵
+<ul>
+<li>文件存取矩阵是稀疏矩阵 =》存取控制表</li>
+<li>用户、文件、存取属性</li>
+<li>存取控制表仅登记对文件拥有存取属性的部分</li>
+<li>存取属性：访问、读、写、执行、创建、删除、授权等</li>
+</ul></li>
+<li>文件属性
+<ul>
+<li>用户分类：属主、合作者、其他</li>
+<li>文件属性：读、写、执行；放在文件目录项中</li>
+<li>用户使用文件时，通过核对文件属性，实现保护</li>
+</ul></li>
+</ul>
+<h2 id="补充内容">5.5 补充内容</h2>
+<p>如何在线性地址空间实现非线性层次目录结构——按名存取</p>
+<p>按名存取——按号存取（存在一个数据结构保存：名和号的映射关系）</p>
+<p>（含路径的文件名）名——目录项【名 | indoe号】——inode号</p>
+<p>文件的存取方法</p>
+<ul>
+<li>顺序存取</li>
+<li>直接存取</li>
+<li>索引存取：索引文件</li>
+</ul>
+<p>文件系统的实现层次</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230225112534129.png" srcset="/img/loading.gif" lazyload /></p>
+<h3 id="inode">Inode</h3>
+<p>Linux系统的FCB中的文件名和其他管理信息分开，其他信息单独组成一个数据结构，称为索引节点<code>inode</code>，由<code>inode号</code>标识。</p>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230225100907302.png" srcset="/img/loading.gif" lazyload
+alt="FCB结构" />
+<figcaption aria-hidden="true">FCB结构</figcaption>
+</figure>
+<p>文件系统中的每个文件都有一个磁盘<code>inode</code>与之对应，这些<code>inode</code>被集中存放在磁盘上的<code>inode区</code>。</p>
+<p>为了避免不断来回于内外存引用磁盘inode表，在内存区开辟一张活动inode表，磁盘inode反映文件静态特性，活动inode表反映文件动态特性</p>
+<h3 id="层次目录结构">层次目录结构</h3>
+<figure>
+<img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230225101609127.png" srcset="/img/loading.gif" lazyload
+alt="Linux和Windows层次目录结构" />
+<figcaption aria-hidden="true">Linux和Windows层次目录结构</figcaption>
+</figure>
+<ul>
+<li>纯树型目录结构：每个文件都只有一个父目录</li>
+<li>有向无环图目录：允许文件有多个父目录而破坏树的特性</li>
+</ul>
+<p><strong>Linux支持多父目录，但其中一个是主父目录，它是文件拥有者</strong>，文件被物理存放在该目录下，其他父目录通过link的方式来连结和引用文件，允许任一父目录删除共享文件。（Windows中的快捷方式）</p>
+<h3 id="文件系统的实现">文件系统的实现</h3>
+<p>文件系统的磁盘结构</p>
+<ul>
+<li>超级块：占用1#号块；存放文件系统结构和管理信息，既有盘位示图的功能，又记录整个文件卷的控制数据</li>
+<li>索引节点区：2#—k+1#块；存放在inode表</li>
+<li>数据区：k+2#—n#块：文件内容保存在这个区域中</li>
+</ul>
+<p>重要数据结构</p>
+<ul>
+<li>用户打开文件表</li>
+<li>系统打开文件表：为了解决多用户进程共享文件、父子进程共享文件而设置的，通过此表项将
+<u>用户打开文件表的表项</u> 和 <u>文件活动inode表的表项</u>
+联接起来，以实现数据的访问和信息的共享。</li>
+<li>主存活动<code>inode表</code></li>
+</ul>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/82705ca69201a804478a2a214a987d67.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/543d71fd2007f6df381df780b979bac0.png" srcset="/img/loading.gif" lazyload /></p>
+<h3 id="文件系统调用">文件系统调用</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">fd = create(file_name_p, mode);<br>unlink(file_name_p);<br>fd = open(file_name_p, mode);<br>close(fd);<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>f_count</code>：反映不同进程通过<strong>同一个系统打开文件表项</strong>共享一个文件的情况</li>
+<li><code>i_count</code>：反映不同进程通过<strong>不同系统打开文件表项</strong>共享同一个文件的情况</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-built_in">read</span>(fd, buf, <span class="hljs-built_in">count</span>);<br><span class="hljs-built_in">write</span>(fd, buf, <span class="hljs-built_in">count</span>);<br></code></pre></td></tr></table></figure>
+<h3 id="文件共享">文件共享</h3>
+<ul>
+<li><p>静态共享</p>
+<ul>
+<li><code>linke(old_name_p, new_name_p)</code></li>
+<li>找到<code>old_name_p</code>所指向的文件索引节点inode编号，检索到<code>new_name_p</code>所指文件的父目录文件，把以存在文件的索引节点<code>inode</code>编号和别名构成一个新的目录项，放在该目录文件中去，以存在文件索引节点<code>inode</code>的连接计数<code>i_link</code>加<code>1</code>。</li>
+</ul></li>
+<li><p>动态共享</p>
+<ul>
+<li><p>使用同一位移指针的文件共享：先打开文件，再<code>fork</code></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/a9e4a3c7e96f8cf5e91b8dedbaede05a.png" srcset="/img/loading.gif" lazyload /></p></li>
+<li><p>使用不同位移指针的文件共享：先<code>fork</code>，再打开文件</p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/e34f5e74a7701f774f2c11aebd51d06e.png" srcset="/img/loading.gif" lazyload /></p></li>
+</ul></li>
+<li><p>符号链接共享：符号链接又称软链接，是一种只有文件名，不指向inode的文件，通过名称引用文件。通过名称查找可以实现链接计算机系统中不同文件系统的文件。</p></li>
+</ul>
+<h3 id="磁盘空闲空间管理">磁盘空闲空间管理</h3>
+<ul>
+<li>位示图：1表示块已占用，0表示块空闲</li>
+<li>空闲区表：（类似于存储管理中的可变分区存储管理）</li>
+<li>空闲链表：将所有空闲块链接在一起</li>
+</ul>
+<h3 id="主存映射文件">主存映射文件</h3>
+<blockquote>
+<p>将文件映射到进程地址空间，使得进程可以通过读写虚存内容来实现文件读写操作</p>
+</blockquote>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230225112807801.png" srcset="/img/loading.gif" lazyload /></p>
+<h2 id="相关习题">相关习题</h2>
+<ul>
+<li>文件目录的主要作用是 <strong>按名存取</strong></li>
+<li>在文件系统中，文件的不同物理结构有不同的优缺点。在下列文件的物理结构中，
+<strong>索引结构</strong>
+具有直接读写文件任意一个记录的能力，又提高了文件存储空间的利用率</li>
+<li>在文件系统中，位示图可用于 <strong>磁盘空间的管理</strong></li>
+<li>Unix系统中，通过 <strong>目录项</strong>
+实现文件系统的按名存取功能</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/nju-course-review/" class="category-chain-item">nju-course-review</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/">#OS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>文件管理</div>
+      <div>http://example.com/2023/02/13/nju-course-review-notes/os/file-management/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>zhc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/15/nju-course-review-notes/os/processor-management/" title="处理器管理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">处理器管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/13/nju-course-review-notes/os/memory-management/" title="存储管理">
+                        <span class="hidden-mobile">存储管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

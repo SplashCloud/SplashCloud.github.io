@@ -1,0 +1,1432 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhc">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="密码加密  可逆加密算法：加密后可以解密得到密码原文 对称加密：加密、解密使用相同的密钥  加密速度快；不安全；AES；DES  非对称加密：加密使用公钥、解密使用私钥  安全性高；加密时间长；RSA；DSA  不可逆加密算法：加密后不能反向解密  存储密码等用户敏感信息；MD5；SHA   前端鉴权  认证、授权、鉴权和权限控制是一个前后依次发生、上下游的关系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web前端复习">
+<meta property="og:url" content="http://example.com/2023/02/22/nju-course-review-notes/web%E5%89%8D%E7%AB%AF/index.html">
+<meta property="og:site_name" content="ICDE">
+<meta property="og:description" content="密码加密  可逆加密算法：加密后可以解密得到密码原文 对称加密：加密、解密使用相同的密钥  加密速度快；不安全；AES；DES  非对称加密：加密使用公钥、解密使用私钥  安全性高；加密时间长；RSA；DSA  不可逆加密算法：加密后不能反向解密  存储密码等用户敏感信息；MD5；SHA   前端鉴权  认证、授权、鉴权和权限控制是一个前后依次发生、上下游的关系">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-04T17:11:39.183Z">
+<meta property="article:author" content="zhc">
+<meta property="article:tag" content="front-end">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Web前端复习 - ICDE</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/csdn_iconfont/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/rss2.xml" title="ICDE" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ICDE的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Web前端复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-22 00:00" pubdate>
+          2023年2月22日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          77 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Web前端复习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="密码加密">密码加密</h2>
+<ul>
+<li>可逆加密算法：加密后可以解密得到密码原文</li>
+<li>对称加密：加密、解密使用相同的密钥
+<ul>
+<li>加密速度快；不安全；AES；DES</li>
+</ul></li>
+<li>非对称加密：加密使用公钥、解密使用私钥
+<ul>
+<li>安全性高；加密时间长；RSA；DSA</li>
+</ul></li>
+<li>不可逆加密算法：加密后不能反向解密
+<ul>
+<li>存储密码等用户敏感信息；MD5；SHA</li>
+</ul></li>
+</ul>
+<h2 id="前端鉴权">前端鉴权</h2>
+<blockquote>
+<p>认证、授权、鉴权和权限控制是一个前后依次发生、上下游的关系</p>
+<p>1.认证 =》2.授权=》3.鉴权=》4.权限控制</p>
+</blockquote>
+<ul>
+<li>认证：根据声明者所特有的识别信息确认声明者的身份</li>
+<li>授权：资源所有者赋予执行者指定范围的资源操作权限，以便对资源的相关操作</li>
+<li>鉴权：对于一个声明者所声明的身份权利，对其所声明的真实性进行鉴别确认的过程</li>
+<li>权限控制：将可执行的操作定义为权限列表并判断操作是否允许/禁止</li>
+</ul>
+<h3 id="http基本鉴权">HTTP基本鉴权</h3>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230219161544843.png" srcset="/img/loading.gif" lazyload /></p>
+<ul>
+<li>优点：简单</li>
+<li>缺点：不安全（用户名密码裸露）；无法主动撤销</li>
+<li>使用场景：对安全要求不高的网络（内部网络）</li>
+</ul>
+<h3 id="session-cookie鉴权">Session-Cookie鉴权</h3>
+<blockquote>
+<p>服务端的Session和浏览器端的Cookie</p>
+</blockquote>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230219161844528.png" srcset="/img/loading.gif" lazyload /></p>
+<ul>
+<li>优点：Cookie简单易用；Session相较于JWT方便管理；后端操作即可</li>
+<li>缺点：依赖Cookie（禁用就会失效）；Cookie不安全；Session增大服务端开销；</li>
+<li>使用场景：中大型的网站</li>
+</ul>
+<h3 id="token">Token</h3>
+<blockquote>
+<p>访问资源接口需要的资源凭证</p>
+</blockquote>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230219162244318.png" srcset="/img/loading.gif" lazyload /></p>
+<ul>
+<li>优点：服务端无状态化、可扩展性好；支持APP移动端设备；不需要Cookie，安全性好，支持跨程序调用；</li>
+<li>缺点：需要前后端配合；占带宽（比sid更大）；有效期短；性能问题（需要对token加密解密）</li>
+</ul>
+<h3 id="refresh-token">Refresh Token</h3>
+<blockquote>
+<p>用来获取Access Token，有效期比Access Token长一些</p>
+</blockquote>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230219163335945.png" srcset="/img/loading.gif" lazyload /></p>
+<h3 id="jwt鉴权">JWT鉴权</h3>
+<blockquote>
+<p>对用户信息组成JSON对象然后进行加密签名实现授权验证的方案</p>
+</blockquote>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230219163533415.png" srcset="/img/loading.gif" lazyload /></p>
+<ul>
+<li>优点：不需要在服务端保存会话信息</li>
+<li>缺点：加密问题；到期问题（无法废止Token或更改Token）</li>
+</ul>
+<h3 id="cookie和session">Cookie和Session</h3>
+<ul>
+<li>安全性：Cookie保存在客户端，可以被随意篡改</li>
+<li>存取值的类型：Cookie只支持字符串数据；Session可以存放任意数据</li>
+<li>有效期不同：Cookie可以设置长时间保持；Session一般失效时间短</li>
+<li>存储大小不同：Cookie保存数据不能超出4K</li>
+</ul>
+<h3 id="token和session">Token和Session</h3>
+<ul>
+<li>存储位置不同：Token存储在前端，Session存储在后端</li>
+<li>安全性：Token安全性更好，因为每个请求都有签名</li>
+<li>支持性不同：Session-Cookie认证需要浏览器的Cookie机制实现；Token验证机制丰富了客户端类型</li>
+</ul>
+<h3 id="登录方案">登录方案</h3>
+<ul>
+<li>单点登录（SSO: Single Sign
+On）登录一次就可以访问其他相互信任的应用系统</li>
+<li>OAuth2.0：允许用户授权第三方网站访问他们存储在另外的服务提供者的信息，而不需要将用户名和密码提供给第三方网站</li>
+<li>联合登录和信任登录</li>
+<li>唯一登录：禁止多人同时登录统一账号</li>
+<li>扫码登录</li>
+<li>一键登录：短信验证码</li>
+</ul>
+<h2 id="前端性能优化">前端性能优化</h2>
+<blockquote>
+<p>要点，常用术语，浏览器渲染机制，性能分析方法，最佳实践</p>
+</blockquote>
+<blockquote>
+<p><strong>看PPT</strong></p>
+</blockquote>
+<h3 id="浏览器页面渲染机制">浏览器页面渲染机制</h3>
+<ul>
+<li>DNS查询 =》TCP握手 =》TLS（Transport Layer Security）协商
+=》TCP慢启动（14KB规则）</li>
+<li>第一步：处理HTML标记并构造DOM树，HTML解析涉及到 tokenization
+和树的构造（<code>&lt;script&gt;</code>标签会阻塞HTML的解析）</li>
+<li>第二步：处理CSS并构建CSSOM树，遍历CSS中每个规则集，根据选择器创建具有父、子和兄弟关系的节点数</li>
+<li>第三步：将DOM和CSSOM组合成一个Render树，计算样式树或渲染树从DOM树的根节点开始构建，遍历每个可见节点</li>
+<li>第四步：在渲染树上运行布局以计算每个节点的几何体
+<ul>
+<li>第一次确定节点大小和位置称为布局；随后对节点大小和位置的重新计算称为回流</li>
+</ul></li>
+<li>最后一步：将各个节点绘制到屏幕上，将在布局阶段计算的每个框转换为屏幕上的实际像素</li>
+<li>TTI（Time To Interactive）第一个请求导致DNS和SSL 到 页面可交互所用
+的时间</li>
+<li>关键渲染路径（Critical Render
+Path）优化策略使浏览器能够通过确定优先加载的资源以及资源加载的顺序来尽可能快地加载页面</li>
+</ul>
+<h3 id="性能优化">性能优化</h3>
+<ul>
+<li>延迟与带宽：传播/传输/处理/排队延迟</li>
+<li>web性能要点
+<ul>
+<li>延迟和带宽对web性能的影响</li>
+<li>传输协议（TCP）对HTTP的影响</li>
+<li>HTTP协议自身的缺陷</li>
+<li>Web应用的发展趋势及性能需求</li>
+<li>浏览器局限性和优化思路</li>
+</ul></li>
+<li>性能要素：计算、渲染、网络
+<ul>
+<li>三个任务：获取资源、页面布局和渲染、js执行</li>
+<li>更多带宽并不重要；延迟是性能瓶颈</li>
+</ul></li>
+<li>性能监控指标
+<ul>
+<li>首屏时间</li>
+<li>用户可交互时间</li>
+<li>总下载时间</li>
+<li>FP（First Paint）、FCP（First Content Paint）（DOM内容）、FMP（First
+Meaningful Paint）（关键元素）</li>
+</ul></li>
+<li>浏览器优化
+<ul>
+<li>基于文档的优化：提前获取资源，提前解析</li>
+<li>推测性优化：预先解析DNS、预先连接可能的目标</li>
+</ul></li>
+<li>（<strong>最佳实践</strong>）两个准则
+<ul>
+<li>消除或减少不必要的网络延迟</li>
+<li>将需要传输的数据压缩至最少</li>
+</ul></li>
+<li>性能准则
+<ul>
+<li>减少DNS查找</li>
+<li>重用TCP连接</li>
+<li>减少HTTP重定向</li>
+<li>使用CDN（Content Distributed Network 内容分发网络）</li>
+<li>去掉不必要的资源</li>
+</ul></li>
+<li>其他准则
+<ul>
+<li>在客户端缓存资源</li>
+<li>传输压缩过的内容</li>
+<li>消除不必要的请求开销</li>
+<li>并行处理请求和响应</li>
+<li>针对协议版本采取优化措施
+<ul>
+<li>针对HTTP1.x优化建议
+<ul>
+<li>采用HTTP管道</li>
+<li>采用域名分片</li>
+<li>打包资源以减少HTTP请求</li>
+<li>嵌入小资源</li>
+</ul></li>
+<li>针对HTTP2的优化
+<ul>
+<li>少发数据，减少请求，减少传输数据量和不必要网络延迟，调整资源供给</li>
+<li>每个来源一个链接，去掉不必要资源打包，利用服务器推送</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="http">HTTP</h2>
+<blockquote>
+<p>基本原理、为何演进、常见的请求方法、头域、状态码</p>
+</blockquote>
+<h3 id="头域">头域</h3>
+<p>由主键/值对组成，描述客户端或者服务器的属性、被传输的资源以及应该实现的连接</p>
+<p>四种不同类型的头标</p>
+<ul>
+<li>通用头标：即可用于请求，也可以用于响应，是作为一个整体而不是特定资源与事务相关联</li>
+<li>请求头标：允许客户端传递关于自身的信息和希望的响应形式</li>
+<li>响应头标：服务器用于传递自身信息的响应</li>
+<li>实体头标：定义被传送资源的信息，即可用于请求，也可以用于响应</li>
+</ul>
+<h3 id="状态码">状态码</h3>
+<ul>
+<li>1xx：信息响应</li>
+<li>2xx：成功响应</li>
+<li>3xx：重定向消息
+<ul>
+<li>301：永久重定向</li>
+</ul></li>
+<li>4xx：客户端错误响应
+<ul>
+<li>400：请求错误</li>
+<li>401：未认证</li>
+<li>403：未授权禁止访问</li>
+<li>404：找不到</li>
+</ul></li>
+<li>5xx：服务端错误响应
+<ul>
+<li>500：服务器内部错误</li>
+</ul></li>
+</ul>
+<h3 id="请求方法">请求方法</h3>
+<ul>
+<li>GET：从服务器获取URL对应资源</li>
+<li>POST：修改URL对应资源</li>
+<li>PUT：修改或创建资源</li>
+<li>DELETE：删除资源</li>
+<li>HEAD：获取少量信息</li>
+</ul>
+<h3 id="http的演进">HTTP的演进</h3>
+<ul>
+<li>HTTP/1.x：报文有一些性能上的缺点：Header无法压缩；相似header的报文重复传输；无法复用</li>
+<li>HTTP/2：通过启用完整的请求和响应多路复用来减少延迟，通过有效压缩HTTP标头字段来最小化协议开销，并增加对请求优先级和服务器推送的支持</li>
+<li>HTTP/3：TCP队头阻塞问题、TCP握手时长问题、移动场景的网络切换成本</li>
+</ul>
+<h3
+id="影响http常见的与tcp相关的延迟">影响HTTP常见的与tcp相关的延迟</h3>
+<ul>
+<li>TCP连接握手</li>
+<li>TCP慢启动拥塞控制</li>
+<li>Nagle的数据聚合算法</li>
+<li>TCP用于承载确认的延迟确认算法</li>
+<li>TIME_WAIT的延迟和端口耗尽</li>
+</ul>
+<h3 id="http1.x的连接管理">HTTP/1.x的连接管理</h3>
+<ul>
+<li>短连接：每一次HTTP请求之前都会有一次TCP握手</li>
+<li>长连接：长连接会保持一段时间</li>
+<li>HTTP流水线：在同一条长连接上发出连续的请求，而不用等待应答返回</li>
+</ul>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230219174647488.png" srcset="/img/loading.gif" lazyload /></p>
+<h2 id="node.js">Node.js</h2>
+<blockquote>
+<p>客户端与服务端编程、静态网页和动态网页、Nodejs优势/特点/应用/原理，事件驱动模型，同步IO和异步IO，阻塞与非阻塞，模块，ES6与CommonJS模块</p>
+</blockquote>
+<h3 id="静态网页与动态网页">静态网页与动态网页</h3>
+<ul>
+<li>静态网页：写死的HTML文件，每次通过url获取到的都是一样的页面，可以直接在浏览器上显示</li>
+<li>动态网页：由程序/脚本生成HTML文件然后返回给前端，每次获取的都可能是不同的页面，不能直接在浏览器上显示</li>
+</ul>
+<h3 id="客户端与服务端编程">客户端与服务端编程</h3>
+<ul>
+<li>客户端编程：JS编程？所见即所得？（及时展示反馈）
+<ul>
+<li>好处：（不用和服务端交互）效率高、事件驱动、平台独立性</li>
+</ul></li>
+<li>服务端编程：使用web编程语言之一编写的程序。定制用户体验
+<ul>
+<li>好处：安全性、兼容性、功能全</li>
+</ul></li>
+</ul>
+<h3 id="node.js概述">Node.js概述</h3>
+<ul>
+<li>Node.js是一个开源的、跨平台的运行时环境。开发人员可以使用JavaScript创建各种服务端工具和应用程序</li>
+<li>特点：事件驱动、异步IO框架</li>
+<li>应用：网站、即时聊天、前端构建工具、命令行工具、反向代理
+<ul>
+<li>适用于数据密集型实时程序（DIRT data-intensive
+real-time）IO密集型</li>
+</ul></li>
+<li>优势：卓越的性能表现；切换成本低；可移植；活跃的社区</li>
+</ul>
+<h3 id="事件驱动模型">事件驱动模型</h3>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230219182900853.png" srcset="/img/loading.gif" lazyload /></p>
+<ul>
+<li>维护了一个 event queue 事件队列</li>
+<li>有一个 event loop 事件循环不断读取 event queue 中的事件
+<ul>
+<li>对于非阻塞事件，处理完调用回调函数向上一层返回结果</li>
+<li>对于阻塞事件，委托后台线程池处理；完成后将执行结果与提供的回调函数一起再被放入事件队列中；当event
+loop 再次读到这个事件时会执行回调函数，将结果返回给上一层。</li>
+</ul></li>
+</ul>
+<h3 id="同步io与异步io">同步IO与异步IO</h3>
+<table>
+<thead>
+<tr class="header">
+<th>同步IO（阻塞式）</th>
+<th>异步IO（非阻塞式）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>利用多线程提供吞吐量</td>
+<td>单线程即可实现高吞吐量</td>
+</tr>
+<tr class="even">
+<td>通过时间片分割和线程调度利用多核CPU</td>
+<td>通过功能划分利用多核CPU</td>
+</tr>
+<tr class="odd">
+<td>需要操作系统调用多线程使用多核CPU</td>
+<td>可以将单进程绑定到单核CPU</td>
+</tr>
+<tr class="even">
+<td>难以充分利用CPU资源</td>
+<td>可以充分利用CPU资源</td>
+</tr>
+<tr class="odd">
+<td>内存轨迹大，数据局部性弱</td>
+<td>内存轨迹小，数据局部性强</td>
+</tr>
+<tr class="even">
+<td>符合线性编程思维</td>
+<td>不符合传统编程思维</td>
+</tr>
+</tbody>
+</table>
+<h3 id="阻塞与非阻塞">阻塞与非阻塞</h3>
+<ul>
+<li>阻塞
+是指在Node.js程序中，其他JS语句的执行，必须等待一个非JS操作完成，因为当阻塞发生时，事件循环无法继续运行JS</li>
+<li>非阻塞
+是指程序先注册一个回调函数（callback），当操作完成后，触发该回调函数执行后续逻辑，但是不阻碍后面代码的执行。</li>
+</ul>
+<h3 id="es6与commonjs模块">ES6与CommonJS模块</h3>
+<blockquote>
+<p>模块：两种模块，不兼容；esm和cjs</p>
+</blockquote>
+<ul>
+<li>语法
+<ul>
+<li>CommonJS模块使用<code>require()</code>加载和<code>module.exports</code>输出</li>
+<li>ES6模块使用<code>import</code>和<code>export</code></li>
+</ul></li>
+<li>CommonJS模块输出的是一个值的拷贝，ES6模块输出的是一个值的引用</li>
+<li>CommonJS模块是运行时加载，ES6模块是编译时输出接口</li>
+<li>循环加载
+<ul>
+<li>对于CommonJS：加载时执行，脚本在<code>require</code>的时候就会全部执行
+<ul>
+<li>require全部执行；加载多少输出多少；循环加载只输出执行部分</li>
+</ul></li>
+<li>对于ESM：<u>遇到模块加载命令只是生成一个引用</u>，等真的需要再去模块里取值</li>
+</ul></li>
+</ul>
+<h2 id="express">Express</h2>
+<blockquote>
+<p>路由、中间件、模板引擎</p>
+</blockquote>
+<h3 id="express概述">express概述</h3>
+<ul>
+<li>最流行的node web框架</li>
+<li>特点：精简、灵活</li>
+<li>express不是固执己见的，是高度包容的</li>
+</ul>
+<h3 id="路由">路由</h3>
+<ul>
+<li>把需要支持的请求（以及请求URL中包含的任何信息）转发到适当的控制器函数</li>
+<li>路由用于确定应用程序如何响应对特定端点的客户机请求，包括一个URI（或路径）和一个特定的HTTP请求方法（GET、POST等）</li>
+<li>每个路由可以具有一个或多个处理程序函数，这些函数在路由匹配时执行</li>
+<li>路由路径
+<ul>
+<li>可以是正则表达式</li>
+<li>可以包含参数：<code>/users/:userId</code> =》可以匹配
+<code>/users/11</code> 的URL，其中userId保存在req.params对象中。</li>
+</ul></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript">app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) &#123;<br>    res.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;GET it&#x27;</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+<h3 id="中间件">中间件</h3>
+<ul>
+<li>中间件是一种功能的封装方式，具体来说就是封装在程序中处理HTTP请求的功能</li>
+<li>中间件是在管道中执行的，通过<code>app.use</code>向管道中插入中间件</li>
+<li>中间件中要调用<code>next()</code>，将控制权传递给下一个中间件</li>
+<li>中间件的装入顺序十分重要</li>
+</ul>
+<h3 id="模板引擎">模板引擎</h3>
+<p>选用模板引擎需要考虑的因素</p>
+<ul>
+<li>进入生产状态的时间</li>
+<li>流行度和活跃度</li>
+<li>风格</li>
+<li>性能/渲染时间</li>
+<li>功能</li>
+</ul>
+<h2 id="javascript">JavaScript</h2>
+<blockquote>
+<p>基本概念，基本语法等、DOM、BOM、事件、事件驱动编程、事件处理模型、作用域、词法作用域、作用域链、闭包、提升、最佳实践、正则、原型对象、class、this、框架优缺点</p>
+</blockquote>
+<h3 id="js概述">JS概述</h3>
+<ul>
+<li>一种脚本语言，由js解释器/引擎计算和执行</li>
+<li>解释型语言，更加宽松的语法和规则，关键类型是函数，包含在网页中</li>
+<li>基本语法：略</li>
+</ul>
+<h3 id="dom和bom">DOM和BOM</h3>
+<ul>
+<li>DOM：文档对象模型，是获取、更改、添加或者删除HTML元素的标准；
+<ul>
+<li>通过该模型，js可以获取创建动态html所需的所有功能</li>
+</ul></li>
+<li>BOM：浏览器对象模型
+<ul>
+<li>通过该模型，赋予了js程序与浏览器交互的能力</li>
+</ul></li>
+<li>window对象：document对象、location对象（当前URL信息）、navigator对象（浏览器信息）、screen对象、history对象，还可以通过window.cookie使用cookie</li>
+</ul>
+<h3 id="事件">事件</h3>
+<ul>
+<li>使web应用程序的响应性、动态性和交互性更强，一般通过回调函数处理</li>
+<li>允许脚本去响应用户与网页上元素的交互，允许通过事件进行对页面的修改</li>
+</ul>
+<h3 id="事件驱动编程">事件驱动编程</h3>
+<ul>
+<li>事件驱动编程是一种编程范式，其中程序流由事件决定，执行特定的操作来响应用户输入</li>
+<li>在事件驱动的应用程序中，通常有一个主循环监听事件，然后在检测到其中一个事件时触发回调函数</li>
+<li>事件处理程序可用于处理和验证用户输入、用户操作和浏览器操作</li>
+</ul>
+<h3 id="事件处理模型">事件处理模型</h3>
+<ul>
+<li>DOM0：内联模型：事件处理程序作为<u>元素的属性</u>添加；传统模型：可以通过脚本（js）添加/删除事件处理程序</li>
+<li>DOM2：通过<code>addEventListener</code>和<code>removeEventListener</code>来添加和删除事件</li>
+<li>DOM事件流：捕获阶段 =》目标阶段 =》冒泡阶段（处理事件）</li>
+</ul>
+<h3 id="作用域">作用域</h3>
+<ul>
+<li>作用域是当前执行上下文，可见或者可被访问的值和表达式，即有权访问的变量集合
+<ul>
+<li>全局作用域</li>
+<li>模块作用域</li>
+<li>函数作用域</li>
+<li>块级作用域（const和let）</li>
+</ul></li>
+</ul>
+<h3 id="闭包">闭包</h3>
+<p>闭包是一个函数及其捆绑的周边环境状态的引用的组合；闭包让开发者可以从内部函数访问外部函数的作用域，会随着函数的创建而创建</p>
+<p><strong>词法作用域</strong>：（静态作用域）根据源代码中声明变量的位置来确定该变量在何处可用</p>
+<p>闭包的应用场景：</p>
+<ul>
+<li>实现私有成员</li>
+<li>保护命名空间</li>
+<li>避免污染全局变量</li>
+<li>变量需要长久驻留在内存</li>
+</ul>
+<h3 id="作用域链">作用域链</h3>
+<p>作用域链包含了一个函数被创建的作用域中对象的集合，决定了哪些数据可以被函数访问，用于在处理标识符的时候进行变量查询</p>
+<h3 id="提升">提升</h3>
+<ul>
+<li>可以先使用变量，再进行声明而不会引发异常，感觉像是 声明
+被提升到了使用语句的前面</li>
+<li>只有使用var声明的变量才能被提升</li>
+<li>类和函数表达式不能被提升，函数声明可以被提升</li>
+<li>let先声明后使用会引起暂时性死区（TDZ）</li>
+</ul>
+<h3 id="最佳实践">最佳实践</h3>
+<ul>
+<li>避免全局变量，始终声明局部变量</li>
+<li>使用严格模式</li>
+<li>在顶部声明，声明变量时初始化</li>
+<li>使用<code>===</code>比较</li>
+<li>减少循环活动</li>
+</ul>
+<blockquote>
+<p>严格模式：<code>use strict</code></p>
+<p>消除js语法的一些不合理、不严谨之处，减少一些怪异行为；消除代码运行的一些不安全之处，保证代码运行的安全；提高编译器效率，增加运行速度；为未来新版本的js做好铺垫</p>
+</blockquote>
+<h3 id="框架优缺点">框架优缺点</h3>
+<ul>
+<li>优点
+<ul>
+<li>封装了复杂困难的代码</li>
+<li>加快开发速度，更快完成项目</li>
+<li>专注于产品内容的价值，而不是实现过程</li>
+<li>让合作更简单</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>如果遇到问题需要钻研框架</li>
+<li>框架更新快速，升级更新是问题</li>
+</ul></li>
+</ul>
+<h3 id="正则表达式">正则表达式</h3>
+<ul>
+<li>以<code>/</code>开始和结束</li>
+<li><code>.</code>匹配单一字符</li>
+<li><code>i</code>：对大小写不敏感</li>
+<li><code>|</code>选择、<code>()</code>子表达式、<code>^</code>匹配开始、<code>$</code>匹配结束、<code>\</code>转义</li>
+<li><code>*</code>：0+次；<code>+</code>：1+次；<code>?</code>：0/1次</li>
+<li><code>&#123;min,max&#125;</code>：min-max次</li>
+<li><code>[]</code>：字符集</li>
+</ul>
+<h3 id="class">class</h3>
+<blockquote>
+<p>JS中声明类的关键字</p>
+</blockquote>
+<h3 id="this">this</h3>
+<ul>
+<li>全局环境下的this：严格模式下是undefined；非严格模式下是window</li>
+<li>上下文对象调用中的this：绑定到该对象上</li>
+<li>bind、call、apply改变this指向：指定参数上</li>
+<li>构造函数和this：构造函数内的this绑定到新创建对象上</li>
+<li>箭头函数中的this：由外层作用域来决定</li>
+</ul>
+<h3 id="原型对象">原型对象</h3>
+<ul>
+<li>每一个对象都有它的原型对象，它可以使用自己原型对象上的属性和方法</li>
+<li>可以通过原型对象扩展对象</li>
+<li>原型链：任何对象都有原型对象=》形成原型链</li>
+</ul>
+<h2 id="css">CSS</h2>
+<blockquote>
+<p>基本概念、选择器、层叠排序、CSS3新特性、CSS
+Sprites、布局、盒模型、BFC、响应式web设计、移动优先设计、渐进渐强</p>
+</blockquote>
+<h3 id="css概述">CSS概述</h3>
+<ul>
+<li>Cascading Style Sheets 层叠样式表，用于设计风格和布局</li>
+<li>CSS优势：丰富的样式定义、简洁、清晰、易于修改和使用</li>
+</ul>
+<h3 id="选择器">选择器</h3>
+<p>语法：<code>selector &#123; property: value; [...] &#125;</code></p>
+<p>例如：<code>h1 &#123; color: blue; &#125;</code></p>
+<ul>
+<li>id(<code>#</code>)/class(<code>.</code>)/标签(<code>p</code>)/属性(<code>[title]</code>)/伪类(<code>:hover</code>)/伪元素(<code>:first-line</code>)/选择器</li>
+<li>组合选择器：
+<ul>
+<li>后代选择器：<code>div p</code> （对div标签下的所有p标签生效）</li>
+<li>子元素选择器：<code>div&gt;p</code>（对div标签下的<strong>子</strong>p标签生效）</li>
+<li>相邻兄弟选择器：<code>div+p</code>（对div标签相邻的p标签生效）</li>
+<li>普通兄弟选择器：<code>div-p</code>（对div标签同一层级的p标签生效）</li>
+</ul></li>
+</ul>
+<h3 id="层叠排序">层叠排序</h3>
+<ul>
+<li>内联样式 &gt; 嵌入样式（头部style） &gt; 外部样式 &gt;
+浏览器缺省样式</li>
+<li>优先级计算：a(是否来自style属性即是否是内联样式)-b(ID)-c(属性/伪类)-d(元素/伪元素)</li>
+</ul>
+<h3 id="css3">CSS3</h3>
+<ul>
+<li>被分成若干个相互独立的模块：有利于规范及时更新和发布，及时调整模块的内容；厂商可以有选择地支持一部分模块，有利于CSS3推广。</li>
+<li>新特征：圆角效果、图形化边界、块阴影与文字阴影、渐变效果、定制字体（<span
+class="citation" data-cites="font-face">@font-face</span>）</li>
+<li><strong>CSS Sprites</strong>：是单个图像中包含的图像集合
+<ul>
+<li>优点：减少服务器请求节约带宽；更换风格方便</li>
+<li>缺点：维护麻烦；图片合成费时费力</li>
+</ul></li>
+</ul>
+<h3 id="布局">布局</h3>
+<p><strong>盒模型</strong></p>
+<p><img
+src="https://my-pictures-repo.obs.cn-east-3.myhuaweicloud.com/my-blog-imgs/image-20230220214046314.png" srcset="/img/loading.gif" lazyload /></p>
+<p><strong>BFC</strong>：（块级格式化上下文）是一个独立的布局环境，其中的元素布局不受外界的影响，并且在一个BFC中，块盒与行盒都会垂直地沿着其父元素的边框排列，只有Block-level
+box参与，规定了内部的Block-level
+Box如何布局，并且与这个局域外部毫不相干</p>
+<h3 id="响应式web设计">响应式web设计</h3>
+<p>（RWD）是一种网页设计方法，该设计可以使网站在多种浏览设备上阅读和导航，同时减少缩放、平移和滚动</p>
+<ul>
+<li><p>优点：可用性得到提升；简化服务器端；更易维护；支持未知设备</p></li>
+<li><p>缺点：性能较差；限制应用的复杂性；用户混淆</p></li>
+<li><p>流畅或灵活的页面布局，根据浏览器窗口大小成比例缩放</p></li>
+<li><p>灵活、比例适中的图像和试听媒体</p></li>
+<li><p>使用CSS3媒体查询，确定浏览器屏幕的宽度并作出相应调整</p></li>
+</ul>
+<h3 id="移动优先">移动优先</h3>
+<ul>
+<li>优先内容和功能</li>
+<li>好处：通用访问，即使没有js也能看到一个拥有基本功能的网站</li>
+<li>移动优先是渐进渐强理念的良好范例，所有用户都能访问核心内容和功能</li>
+</ul>
+<p><strong>渐进渐强</strong>：首先基于一个具有广泛兼容性的核心方案，创建一个基线版本，然后再根据可能用到的浏览器特性，慢慢添加一些特性和功能。</p>
+<h2 id="html">HTML</h2>
+<blockquote>
+<p>基本标签、块内元素和行内元素、HTML5、优势、应用、新元素、新功能、语义化</p>
+</blockquote>
+<h3 id="html概述">HTML概述</h3>
+<ul>
+<li>HyperText Markup Language，超文本标记语言，定义了网页内容和结构</li>
+<li>块级元素占据父元素（容器）的整个水平空间，垂直空间等于内同高度；行内元素只占据元素边框所包含的空间</li>
+<li><code>&lt;title&gt;</code>：用于定义浏览器工具栏中的标题；提供页面被添加到收藏夹的标题；显示在搜索引擎结果中的页面标题</li>
+<li><code>&lt;meta&gt;</code>：用于提供HTML文档元数据；只出现在head里；用于给出网页描述、关键词、文档作者、最后修改日期等信息</li>
+<li>em vs i，strong vs b：i和b都是无强调或着重意味的</li>
+<li>table 不要用于布局：结构混乱不清晰；机器难以理解，不利于SEO；</li>
+<li>表单中的隐藏字段：目的在于收集或发送信息，以利于被处理表单的程序所使用；帮助确认用户身份；保存全局变量；</li>
+</ul>
+<h3 id="html5">HTML5</h3>
+<ul>
+<li><p>HTML5是最新的稳定版本</p></li>
+<li><p>优势：跨浏览器兼容性、<u>大道至简</u>（各种简化）、语义化、可用性和用户体验的改进、无插件范式、安全、大量用于移动应用和游戏，对SEO友好</p></li>
+<li><p>应用：本地数据存储、访问本地文件、本地SQL数据、缓存引用</p></li>
+<li><p>新元素/新功能</p>
+<ul>
+<li><p>新元素：article、section、header、footer等语义化标签、</p></li>
+<li><p>更多原生功能，原生支持音视频</p></li>
+<li><p>完全支持CSS3</p></li>
+<li><p>提供原生的绘图功能（svg和canvas对比）</p>
+<table>
+<thead>
+<tr class="header">
+<th>canvas</th>
+<th>svg</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>依赖分辨率</td>
+<td>不依赖分辨率</td>
+</tr>
+<tr class="even">
+<td>不支持事件处理器</td>
+<td>支持事件处理器</td>
+</tr>
+<tr class="odd">
+<td>弱文本渲染能力</td>
+<td>强文本渲染能力</td>
+</tr>
+<tr class="even">
+<td>最适合图像密集型游戏</td>
+<td>不适合游戏</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>web存储：相比cookie更加安全快速；localStorage（整个网站数据）sessionStorage（当前会话数据）</p></li>
+<li><p>其他新特性：缓存、数据库、web worker、webSocket</p></li>
+</ul></li>
+<li><p><strong>语义化</strong>：根据结构化的内容选择合适的标签；有利于SEO、开发维护体验好、用户体验更好、更好的可访问性，方便任何设备对代码进行解析。</p>
+<ul>
+<li>帮助实现ARIA（Accesible RIA）无障碍富网络应用</li>
+</ul></li>
+<li><p>无插件范式：过去很多功能只能通过插件实现，但是在HTML5中提供了原生实现</p>
+<ul>
+<li>插件的问题：安装可能失败；被禁用或者屏蔽；被攻击</li>
+</ul></li>
+<li><p>CORS：Cross-Origin Resource Share 跨域资源共享 SOP：Same Origin
+Policy 同源政策</p></li>
+<li><p>RIA：Rich Internet Applications 富网络应用</p></li>
+</ul>
+<h2 id="概述">概述</h2>
+<blockquote>
+<p>DNS、URL/URI/URN、web发展历程、Web3.0</p>
+</blockquote>
+<h3 id="web发展历程">web发展历程</h3>
+<ul>
+<li>web1.0 =》web2.0 =》web3.0</li>
+<li>web2.0的局限性：用户缺乏自主权（数字身份、个人数据、算法）</li>
+<li><strong>web3.0</strong>的特征：语义化、3D、人工智能、去中心化</li>
+</ul>
+<h3 id="dns">DNS</h3>
+<ul>
+<li>Domain Name System</li>
+<li>其出现之前使用 hosts.txt保存name-to-IP的映射关系</li>
+<li>应用程序（DNS客户端）——解析器——DNS服务器</li>
+<li>DNS名称树形层次结构</li>
+<li>FQDN：Fully Qualified Domain Name 全限定域名</li>
+<li>主名称服务器和辅名称服务器</li>
+<li><strong>递归和迭代查询</strong></li>
+<li>DNS服务器有缓存</li>
+</ul>
+<h3 id="uriurnurl">URI/URN/URL</h3>
+<ul>
+<li>RR：Resource Records 资源记录</li>
+<li>URI：Uniform Resource Identifier ⽤于标识某⼀互联⽹资源名称的字符串
+（最大 是后面两个超集）</li>
+<li>URL：Uniform Resource Location 属于URI 标识互联网资源
+<ul>
+<li>URL协议：http https file mailto</li>
+<li>超链接：绝对URL、相对URL、同一网页内</li>
+<li>URL编码：<strong>只能使用 ASCII 字符集</strong>
+<ul>
+<li>%20/+ =&gt; 空格</li>
+<li>%xx =&gt; 中文</li>
+</ul></li>
+</ul></li>
+<li>URN：Uniform Resource Name 仅用于命名 位置无关 通过名称指定</li>
+</ul>
+<h2 id="级web前端期末考试2022">2020级web前端期末考试（2022）</h2>
+<h3 id="名词解释">名词解释</h3>
+<ul>
+<li>URN</li>
+<li>CSSOM</li>
+<li>SVG</li>
+<li>CANVAS</li>
+<li>ES6</li>
+<li>WebAssembly</li>
+<li>Cookie</li>
+<li>Session</li>
+<li>Render Tree</li>
+<li>RWD</li>
+</ul>
+<h3 id="简答题">简答题</h3>
+<ol type="1">
+<li>web3.0核心技术</li>
+<li>对闭包的理解、优缺点和应用</li>
+<li>前端智能化的理解和典型应用</li>
+<li>JavaScript的数据类型</li>
+<li>JavaScript的动态和弱类型是什么意思</li>
+<li>状态码的解释：200、301、303、404、500</li>
+<li>箭头函数和普通函数的区别</li>
+<li>Nodejs如何实现高并发</li>
+</ol>
+<h3 id="问答题">问答题</h3>
+<ol type="1">
+<li>流行的前端框架？Vanilla JavaScript是什么？为什么要推广？</li>
+<li>HTTP1.0-3.0的发展过程？HTTP/3相比之前的HTTP协议解决了什么问题？</li>
+<li>简述四种前端鉴权方案？</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/nju-course-review/" class="category-chain-item">nju-course-review</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/front-end/">#front-end</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Web前端复习</div>
+      <div>http://example.com/2023/02/22/nju-course-review-notes/web前端/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>zhc</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/08/others/%E5%A2%9E%E5%8A%A0ssh/" title="为git添加ssh">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">为git添加ssh</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/21/6.S081/6.S081-lab6-thread/" title="Lab6 Multithreading">
+                        <span class="hidden-mobile">Lab6 Multithreading</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
